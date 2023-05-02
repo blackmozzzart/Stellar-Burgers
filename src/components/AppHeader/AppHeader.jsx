@@ -6,26 +6,29 @@ import styles from './appHeader.module.css';
 export const AppHeader = () => {
 
     return (
-        <div className={`${styles.header} p-4`}>
+        <header className={`${styles.header} p-4`}>
             <div className={`container ${styles.headerInner}`}>
-                <div className={styles.nav}>
+                <nav className={styles.nav}>
                     <MenuItem
+                        href={'#'}
                         icon={<BurgerIcon />}
                         text={'Конструктор'}
                     />
                     <MenuItem
+                        href={'#'}
                         icon={<ListIcon />}
                         text={'Лента заказов'}
                     />
-                </div>
+                </nav>
                 <Logo />
-                <div className={`${styles.nav} ${styles.nav_right}`}>
+                <nav className={`${styles.nav} ${styles.nav_right}`}>
                     <MenuItem
+                        href={'#'} // заглушка на будущее
                         icon={<ProfileIcon />}
                         text={'Личный кабинет'}
                     />
-                </div>
+                </nav>
             </div>
-        </div>
+        </header>
     )
 }

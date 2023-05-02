@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientItem } from '../IngredientItem/IngredientItem';
+import { IngredientShape } from '../../utils/constants';
 import styles from './burgerIngredients.module.css';
 
 const categoryMap = {
@@ -69,4 +71,8 @@ export const BurgerIngredients = ({ data }) => {
             </div>
         </div>
     )
+}
+
+BurgerIngredients.propTypes = {
+    data: PropTypes.arrayOf(IngredientShape)
 }

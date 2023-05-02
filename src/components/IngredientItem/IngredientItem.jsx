@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredientItem.module.css';
 
@@ -14,4 +15,11 @@ export const IngredientItem = ({ image, counter, price, text }) => {
             <span className={`${styles.text} text text_type_main-default`}>{text}</span>
         </div>
     )
+}
+
+IngredientItem.propTypes = {
+    image: PropTypes.string,
+    counter: PropTypes.number,
+    price: PropTypes.number,
+    text: PropTypes.string,
 }

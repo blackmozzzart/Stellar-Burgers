@@ -9,10 +9,10 @@ function App() {
   return (
     <div className="App">
       <AppHeader />
-      <div className={`container ${styles.columns}`}>
+      <main className={`container ${styles.columns}`}>
         <BurgerIngredients data={data} />
         <BurgerConstructor data={data} />
-      </div>
+      </main>
     </div>
   );
 }
