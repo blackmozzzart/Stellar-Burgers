@@ -1,0 +1,22 @@
+.header {
+    background-color: #1C1C21;
+}
+
+.headerInner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex: 1;
+
+    &>* {
+        flex: 1;
+    }
+}
+
+.nav {
+    display: flex;
+}
+
+.nav_right {
+    justify-content: flex-end;
+}

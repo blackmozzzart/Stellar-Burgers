@@ -1,0 +1,26 @@
+.container {
+    position: relative;
+}
+
+.image {
+    cursor: pointer;
+}
+
+.counter {
+    position: absolute;
+    height: 32px;
+    width: 32px;
+    border-radius: 16px;
+}
+
+.price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text {
+    display: block;
+    color: #F2F2F3;
+    text-align: center;
+}

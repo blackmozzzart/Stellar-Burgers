@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 600px;
+    overflow: auto;
+    max-height: calc(100vh - 476px);
+    scroll-behavior: smooth;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.sum {
+    display: flex;
+    align-items: center;
+
+    & svg {
+        width: 33px;
+        height: 33px;
+        margin-left: 9px;
+    }
+}
