@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CurrentBun } from '../CurrentBun';
 import { IngredientShape } from '../../utils/constants';
 import styles from './burgerConstructor.module.css';
+import { Modal } from '../Modal';
+import { OrderDetails } from '../OrderDetails';
 
 export const BurgerConstructor = ({ data }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const defaultBun = data.find(({ type }) => type === 'bun')
+    if (typeof defaultBun == 'undefined') {
+        return <div>Идет загрузка...</div>
+    }
 
     return (
         <div className='container pt-25'>
@@ -36,10 +42,20 @@ export const BurgerConstructor = ({ data }) => {
                     <span className='text text_type_digits-medium'>810</span>
                     <CurrencyIcon />
                 </div>
-                <Button htmlType="button" type="primary" size="medium" >
+                <Button htmlType="button" type="primary" size="medium" onClick={() => setIsModalOpen(true)}>
                     Оформить заказ
                 </Button>
             </div>
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false)
+                }}
+            >
+                <OrderDetails
+                    orderId={'034536'}
+                />
+            </Modal>
         </div>
     )
 }

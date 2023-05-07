@@ -1,9 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientItem } from '../IngredientItem/IngredientItem';
 import { IngredientShape } from '../../utils/constants';
 import styles from './burgerIngredients.module.css';
+import { Modal } from '../Modal';
+import { IngredientDetails } from '../IngredientDetails';
 
 const categoryMap = {
     bun: 'Булки',
@@ -18,7 +20,9 @@ const categoryOrderMap = {
 }
 
 export const BurgerIngredients = ({ data }) => {
-    const [current, setCurrent] = React.useState('bun');
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [currentTab, setCurrentTab] = useState('bun')
+    const [currentIngredient, setCurrentIngredient] = useState(null)
 
     const groupedData = useMemo(() => {
         const map = data.reduce((acc, item) => {
@@ -41,8 +45,8 @@ export const BurgerIngredients = ({ data }) => {
                     <a href={`#${category}`} key={category}>
                         <Tab
                             value={category}
-                            active={current === category}
-                            onClick={setCurrent}
+                            active={currentTab === category}
+                            onClick={setCurrentTab}
                         >
                             {categoryMap[category]}
                         </Tab>
@@ -63,12 +67,34 @@ export const BurgerIngredients = ({ data }) => {
                                     text={ingredient.name}
                                     price={ingredient.price}
                                     image={ingredient.image}
+                                    onClick={() => {
+                                        setCurrentIngredient(ingredient)
+                                        setIsModalOpen(true)
+                                    }}
                                 />
                             ))}
                         </div>
                     </div>
                 ))}
             </div>
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false)
+                }}
+                title='Детали ингридиента'
+            >
+                {currentIngredient && (
+                    <IngredientDetails
+                        image={currentIngredient.image}
+                        name={currentIngredient.name}
+                        proteins={currentIngredient.proteins}
+                        fat={currentIngredient.fat}
+                        carbohydrates={currentIngredient.carbohydrates}
+                        calories={currentIngredient.calories}
+                    />
+                )}
+            </Modal>
         </div>
     )
 }
