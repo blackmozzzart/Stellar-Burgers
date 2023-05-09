@@ -77,24 +77,25 @@ export const BurgerIngredients = ({ data }) => {
                     </div>
                 ))}
             </div>
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => {
-                    setIsModalOpen(false)
-                }}
-                title='Детали ингридиента'
-            >
-                {currentIngredient && (
-                    <IngredientDetails
-                        image={currentIngredient.image}
-                        name={currentIngredient.name}
-                        proteins={currentIngredient.proteins}
-                        fat={currentIngredient.fat}
-                        carbohydrates={currentIngredient.carbohydrates}
-                        calories={currentIngredient.calories}
-                    />
-                )}
-            </Modal>
+            {isModalOpen && (
+                <Modal
+                    onClose={() => {
+                        setIsModalOpen(false)
+                    }}
+                    title='Детали ингридиента'
+                >
+                    {currentIngredient && (
+                        <IngredientDetails
+                            image={currentIngredient.image}
+                            name={currentIngredient.name}
+                            proteins={currentIngredient.proteins}
+                            fat={currentIngredient.fat}
+                            carbohydrates={currentIngredient.carbohydrates}
+                            calories={currentIngredient.calories}
+                        />
+                    )}
+                </Modal>
+            )}
         </div>
     )
 }

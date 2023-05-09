@@ -46,16 +46,17 @@ export const BurgerConstructor = ({ data }) => {
                     Оформить заказ
                 </Button>
             </div>
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => {
-                    setIsModalOpen(false)
-                }}
-            >
-                <OrderDetails
-                    orderId={'034536'}
-                />
-            </Modal>
+            {isModalOpen && (
+                <Modal
+                    onClose={() => {
+                        setIsModalOpen(false)
+                    }}
+                >
+                    <OrderDetails
+                        orderId={'034536'}
+                    />
+                </Modal>
+            )}
         </div>
     )
 }

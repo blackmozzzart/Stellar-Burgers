@@ -22,12 +22,16 @@ function App() {
         isLoading: true
       }))
       const res = await fetch(INGREDIENTS_URL)
-      const data = await res.json()
-      setState((prevState) => ({
-        ...prevState,
-        data: data.data,
-        isLoading: false
-      }))
+      if (res.ok) {
+        const data = await res.json()
+        setState((prevState) => ({
+          ...prevState,
+          data: data.data,
+          isLoading: false
+        }))
+      } else {
+        return Promise.reject(`Ошибка ${res.status}`);
+      }
     }
     fetchData()
       .catch(

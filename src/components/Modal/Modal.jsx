@@ -11,7 +11,6 @@ export const Modal = (props) => {
     const { onClose } = props;
 
     const handleCloseModal = (e) => {
-        e.stopPropagation()
         onClose()
     }
 
@@ -27,12 +26,8 @@ export const Modal = (props) => {
         }
     }, [onClose])
 
-    if (!props.isOpen) {
-        return null;
-    }
-
     return createPortal(
-        <ModalOverlay>
+        <ModalOverlay onClick={handleCloseModal}>
             <div className={`${styles.modal} pl-10 pt-10 pb-15 pr-10`}>
                 <div className={styles.modalHeader}>
                     {props.title && (
@@ -51,6 +46,5 @@ export const Modal = (props) => {
 Modal.propTypes = {
     title: PropTypes.string,
     children: PropTypes.node,
-    isOpen: PropTypes.bool,
     onClose: PropTypes.func
 }
