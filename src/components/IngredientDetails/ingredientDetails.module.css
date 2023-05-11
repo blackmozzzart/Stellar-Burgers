@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image {
+    height: 240px;
+    width: 480px;
+}
+
+.details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    color: #8585AD;
+    column-gap: 20px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

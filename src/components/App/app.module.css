@@ -4,3 +4,12 @@
     align-items: flex-start;
     column-gap: 40px;
 }
+
+.section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 96px);
+    row-gap: 40px;
+}

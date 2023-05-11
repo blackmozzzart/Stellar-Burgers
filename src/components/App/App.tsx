@@ -1,18 +1,65 @@
-import React from 'react';
-import { data } from '../../utils/data';
+import React, { useEffect, useState } from 'react';
+import { INGREDIENTS_URL } from '../../utils/constants';
 import { AppHeader } from '../AppHeader';
 import { BurgerConstructor } from '../BurgerConstructor';
 import { BurgerIngredients } from '../BurgerIngredients/BurgerIngredients';
+import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+
 import styles from './app.module.css';
 
 function App() {
+  const [state, setState] = useState({
+    isLoading: false,
+    hasError: false,
+    data: []
+  })
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setState((prevState) => ({
+        ...prevState,
+        hasError: false,
+        isLoading: true
+      }))
+      const res = await fetch(INGREDIENTS_URL)
+      if (res.ok) {
+        const data = await res.json()
+        setState((prevState) => ({
+          ...prevState,
+          data: data.data,
+          isLoading: false
+        }))
+      } else {
+        return Promise.reject(`Ошибка ${res.status}`);
+      }
+    }
+    fetchData()
+      .catch(
+        (error) => setState((prevState) => ({
+          ...prevState,
+          hasError: true,
+          isLoading: false
+        }))
+      )
+  }, [])
+
   return (
     <div className="App">
       <AppHeader />
-      <main className={`container ${styles.columns}`}>
-        <BurgerIngredients data={data} />
-        <BurgerConstructor data={data} />
-      </main>
+      {state.hasError ? (
+        <section className={styles.section}>
+          <h1 className="text text_type_main-large">Что-то пошло не так :(</h1>
+          <p className="text text_type_main-medium">В приложении произошла ошибка. Пожалуйста, перезагрузите страницу</p>
+          <Button htmlType="button" type="primary" size="medium" onClick={() => { window.location.reload() }}>
+            Обновить страницу
+          </Button>
+        </section>
+      ) : (
+        <main className={`container ${styles.columns}`}>
+          <BurgerIngredients data={state.data} />
+          <BurgerConstructor data={state.data} />
+        </main>
+      )}
     </div>
   );
 }
