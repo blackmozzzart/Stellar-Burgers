@@ -6,6 +6,7 @@ import { BurgerIngredients } from '../BurgerIngredients/BurgerIngredients';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './app.module.css';
+import { DataContext } from '../../services/dataContext';
 
 function App() {
   const [state, setState] = useState({
@@ -56,8 +57,10 @@ function App() {
         </section>
       ) : (
         <main className={`container ${styles.columns}`}>
-          <BurgerIngredients data={state.data} />
-          <BurgerConstructor data={state.data} />
+          <DataContext.Provider value={state.data}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+          </DataContext.Provider>
         </main>
       )}
     </div>
