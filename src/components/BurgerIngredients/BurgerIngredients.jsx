@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useMemo, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientItem } from '../IngredientItem/IngredientItem';
-import { IngredientShape } from '../../utils/constants';
 import styles from './burgerIngredients.module.css';
 import { Modal } from '../Modal';
 import { IngredientDetails } from '../IngredientDetails';
+import { DataContext } from '../../services/dataContext';
 
 const categoryMap = {
     bun: 'Булки',
@@ -19,10 +18,12 @@ const categoryOrderMap = {
     main: 3,
 }
 
-export const BurgerIngredients = ({ data }) => {
+export const BurgerIngredients = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [currentTab, setCurrentTab] = useState('bun')
     const [currentIngredient, setCurrentIngredient] = useState(null)
+
+    const data = useContext(DataContext);
 
     const groupedData = useMemo(() => {
         const map = data.reduce((acc, item) => {
@@ -101,5 +102,4 @@ export const BurgerIngredients = ({ data }) => {
 }
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(IngredientShape)
 }

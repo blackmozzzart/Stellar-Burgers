@@ -1,17 +1,51 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useState } from 'react';
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CurrentBun } from '../CurrentBun';
-import { IngredientShape } from '../../utils/constants';
 import styles from './burgerConstructor.module.css';
 import { Modal } from '../Modal';
 import { OrderDetails } from '../OrderDetails';
+import { DataContext } from '../../services/dataContext';
+import { checkReponse } from '../../utils/checkResponse';
+import { ORDERS_URL } from '../../utils/constants';
 
-export const BurgerConstructor = ({ data }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false)
+const totalPrice = (data) => {
+    return data.reduce((total, { price }) => total + price, 0)
+}
+
+export const BurgerConstructor = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [OrderNumber, setOrderNumber] = useState(null);
+    const [hasError, setError] = useState(false);
+    const data = useContext(DataContext);
     const defaultBun = data.find(({ type }) => type === 'bun')
     if (typeof defaultBun == 'undefined') {
         return <div>Идет загрузка...</div>
+    }
+
+    const ingredientsWithoutBun = data.filter((item) => {
+        return item.type === 'bun' ? false : true;
+    })
+
+    const handleClick = async () => {
+        await fetch(ORDERS_URL, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                ingredients: [defaultBun, ...ingredientsWithoutBun].map(({ _id }) => {
+                    return _id
+                })
+            })
+        })
+            .then(checkReponse)
+            .then((data) => {
+                setOrderNumber(data.order.number)
+            })
+            .catch(() => {
+                setError(true)
+            })
+            .finally(() => {
+                setIsModalOpen(true)
+            })
     }
 
     return (
@@ -20,9 +54,7 @@ export const BurgerConstructor = ({ data }) => {
                 bun={defaultBun}
             >
                 <div className={`${styles.container}`}>
-                    {data.filter((item) => {
-                        return item.type === 'bun' ? false : true;
-                    }).map((item) => (
+                    {ingredientsWithoutBun.map((item) => (
                         <div className={`${styles.row} pr-2`} key={item._id}>
                             <div className="mr-2">
                                 <DragIcon type="primary" />
@@ -39,10 +71,10 @@ export const BurgerConstructor = ({ data }) => {
             </CurrentBun>
             <div className={`${styles.wrapper} text text_type_digits-default mb-1 pt-10`}>
                 <div className={`${styles.sum} mr-10`}>
-                    <span className='text text_type_digits-medium'>810</span>
+                    <span className='text text_type_digits-medium'>{totalPrice([defaultBun, ...ingredientsWithoutBun])}</span>
                     <CurrencyIcon />
                 </div>
-                <Button htmlType="button" type="primary" size="medium" onClick={() => setIsModalOpen(true)}>
+                <Button htmlType="button" type="primary" size="medium" onClick={handleClick}>
                     Оформить заказ
                 </Button>
             </div>
@@ -52,9 +84,12 @@ export const BurgerConstructor = ({ data }) => {
                         setIsModalOpen(false)
                     }}
                 >
-                    <OrderDetails
-                        orderId={'034536'}
-                    />
+                    {hasError ?
+                        <p className='text text_type_main-medium mb-6'>Не получилось создать заказ, повторите снова.</p> :
+                        <OrderDetails
+                            orderId={OrderNumber}
+                        />
+                    }
                 </Modal>
             )}
         </div>
@@ -62,5 +97,4 @@ export const BurgerConstructor = ({ data }) => {
 }
 
 BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(IngredientShape)
 }
