@@ -5,6 +5,8 @@ import styles from './burgerConstructor.module.css';
 import { Modal } from '../Modal';
 import { OrderDetails } from '../OrderDetails';
 import { DataContext } from '../../services/dataContext';
+import { checkReponse } from '../../utils/checkResponse';
+import { ORDERS_URL } from '../../utils/constants';
 
 const totalPrice = (data) => {
     return data.reduce((total, { price }) => total + price, 0)
@@ -12,7 +14,7 @@ const totalPrice = (data) => {
 
 export const BurgerConstructor = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [OrderNumber, setOrderNumber] = useState('');
+    const [OrderNumber, setOrderNumber] = useState(null);
     const [hasError, setError] = useState(false);
     const data = useContext(DataContext);
     const defaultBun = data.find(({ type }) => type === 'bun')
@@ -25,7 +27,7 @@ export const BurgerConstructor = () => {
     })
 
     const handleClick = async () => {
-        await fetch('https://norma.nomoreparties.space/api/orders', {
+        await fetch(ORDERS_URL, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -34,17 +36,17 @@ export const BurgerConstructor = () => {
                 })
             })
         })
-            .then((res) => res.json())
+            .then(checkReponse)
             .then((data) => {
-                setOrderNumber(`${data.order.number}`)
-                setIsModalOpen(true)
+                setOrderNumber(data.order.number)
             })
             .catch(() => {
                 setError(true)
+            })
+            .finally(() => {
                 setIsModalOpen(true)
             })
     }
-
 
     return (
         <div className='container pt-25'>
