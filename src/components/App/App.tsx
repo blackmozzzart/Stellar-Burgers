@@ -1,53 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { INGREDIENTS_URL } from '../../utils/constants';
-import { AppHeader } from '../AppHeader';
-import { BurgerConstructor } from '../BurgerConstructor';
-import { BurgerIngredients } from '../BurgerIngredients/BurgerIngredients';
+import React, { useEffect } from 'react';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd'
 
 import styles from './app.module.css';
-import { DataContext } from '../../services/dataContext';
+import { AppHeader } from '../AppHeader';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+import { BurgerConstructor } from '../BurgerConstructor';
+import { BurgerIngredients } from '../BurgerIngredients/BurgerIngredients';
+import { fetchIngredientsThunk } from '../../services/actions/ingredients';
 
 function App() {
-  const [state, setState] = useState({
-    isLoading: false,
-    hasError: false,
-    data: []
-  })
+  const dispatch = useAppDispatch();
+  const hasLoadingError = useAppSelector((store) => store.ingredients.error);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setState((prevState) => ({
-        ...prevState,
-        hasError: false,
-        isLoading: true
-      }))
-      const res = await fetch(INGREDIENTS_URL)
-      if (res.ok) {
-        const data = await res.json()
-        setState((prevState) => ({
-          ...prevState,
-          data: data.data,
-          isLoading: false
-        }))
-      } else {
-        return Promise.reject(`Ошибка ${res.status}`);
-      }
-    }
-    fetchData()
-      .catch(
-        (error) => setState((prevState) => ({
-          ...prevState,
-          hasError: true,
-          isLoading: false
-        }))
-      )
-  }, [])
+    dispatch(fetchIngredientsThunk())
+  }, [dispatch])
 
   return (
     <div className="App">
       <AppHeader />
-      {state.hasError ? (
+      {hasLoadingError ? (
         <section className={styles.section}>
           <h1 className="text text_type_main-large">Что-то пошло не так :(</h1>
           <p className="text text_type_main-medium">В приложении произошла ошибка. Пожалуйста, перезагрузите страницу</p>
@@ -56,12 +30,12 @@ function App() {
           </Button>
         </section>
       ) : (
-        <main className={`container ${styles.columns}`}>
-          <DataContext.Provider value={state.data}>
+        <DndProvider backend={HTML5Backend}>
+          <main className={`container ${styles.columns}`}>
             <BurgerIngredients />
             <BurgerConstructor />
-          </DataContext.Provider>
-        </main>
+          </main>
+        </DndProvider>
       )}
     </div>
   );

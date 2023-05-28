@@ -1,10 +1,13 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientItem } from '../IngredientItem/IngredientItem';
 import styles from './burgerIngredients.module.css';
 import { Modal } from '../Modal';
 import { IngredientDetails } from '../IngredientDetails';
-import { DataContext } from '../../services/dataContext';
+
+import { useAppDispatch, useAppSelector } from '../../services/store';
+import { SET_SELECTED_INGREDIENT } from "../../services/actions/ingredientDetails";
+import { groupIngredientsByCategory } from '../../utils/groupIngredientsByCategory';
 
 const categoryMap = {
     bun: 'Булки',
@@ -12,37 +15,31 @@ const categoryMap = {
     main: 'Начинки',
 }
 
-const categoryOrderMap = {
-    bun: 1,
-    sauce: 2,
-    main: 3,
-}
-
 export const BurgerIngredients = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const dispatch = useAppDispatch()
+
     const [currentTab, setCurrentTab] = useState('bun')
-    const [currentIngredient, setCurrentIngredient] = useState(null)
+    const ingredientsList = useAppSelector(store => store.ingredients.ingredients)
+    const selectedBunId = useAppSelector(store => store.burgerConstructor.bun)
 
-    const data = useContext(DataContext);
+    const igredientsInConstructor = useAppSelector((store) => store.burgerConstructor.ingredients.reduce((acc, item) => {
+        if (!acc[item]) {
+            acc[item] = 0;
+        }
 
-    const groupedData = useMemo(() => {
-        const map = data.reduce((acc, item) => {
-            const type = item.type;
-            if (!acc[type]) {
-                acc[type] = [];
-            }
-            acc[type].push(item)
-            return acc;
-        }, {})
+        acc[item] += 1;
+        return acc
+    }, {}))
+    const selectedIgredientInfo = useAppSelector((store) => store.ingredientDetails.selectedIngredient)
 
-        return Object.entries(map).sort((a, b) => categoryOrderMap[a[0]] - categoryOrderMap[b[0]])
-    }, [data]);
+    const isModalOpen = Boolean(selectedIgredientInfo)
+    const groupedIngredients = useMemo(() => groupIngredientsByCategory(ingredientsList), [ingredientsList]);
 
     return (
         <div className={styles.wrapper}>
             <h1 className='text text_type_main-large pt-10 pb-5'>Соберите бургер</h1>
             <div className={styles.tabs}>
-                {groupedData.map(([category]) => (
+                {groupedIngredients.map(([category]) => (
                     <a href={`#${category}`} key={category}>
                         <Tab
                             value={category}
@@ -55,25 +52,31 @@ export const BurgerIngredients = () => {
                 ))}
             </div>
             <div className={styles.container}>
-                {groupedData.map(([category, ingredients]) => (
+                {groupedIngredients.map(([category, ingredients]) => (
                     <div key={category} id={category} className='mt-10'>
                         <h3 className='text text_type_main-medium mb-6'>
                             {categoryMap[category]}
                         </h3>
                         <div className={styles.ingredientsWrapper}>
-                            {ingredients.map((ingredient) => (
-                                <IngredientItem
-                                    key={ingredient._id}
-                                    // counter={1}
-                                    text={ingredient.name}
-                                    price={ingredient.price}
-                                    image={ingredient.image}
-                                    onClick={() => {
-                                        setCurrentIngredient(ingredient)
-                                        setIsModalOpen(true)
-                                    }}
-                                />
-                            ))}
+                            {ingredients.map((ingredient) => {
+                                // выбираем ингредиенты или булку если такой id уже есть
+                                const counter = igredientsInConstructor[ingredient._id] || (selectedBunId === ingredient._id && 1) || null;
+
+                                return (
+                                    <IngredientItem
+                                        key={ingredient._id}
+                                        id={ingredient._id}
+                                        text={ingredient.name}
+                                        price={ingredient.price}
+                                        image={ingredient.image}
+                                        type={ingredient.type}
+                                        counter={counter}
+                                        onClick={() => {
+                                            dispatch({ type: SET_SELECTED_INGREDIENT, payload: ingredient })
+                                        }}
+                                    />
+                                )
+                            })}
                         </div>
                     </div>
                 ))}
@@ -81,18 +84,18 @@ export const BurgerIngredients = () => {
             {isModalOpen && (
                 <Modal
                     onClose={() => {
-                        setIsModalOpen(false)
+                        dispatch({ type: SET_SELECTED_INGREDIENT, payload: null })
                     }}
                     title='Детали ингридиента'
                 >
-                    {currentIngredient && (
+                    {selectedIgredientInfo && (
                         <IngredientDetails
-                            image={currentIngredient.image}
-                            name={currentIngredient.name}
-                            proteins={currentIngredient.proteins}
-                            fat={currentIngredient.fat}
-                            carbohydrates={currentIngredient.carbohydrates}
-                            calories={currentIngredient.calories}
+                            image={selectedIgredientInfo.image}
+                            name={selectedIgredientInfo.name}
+                            proteins={selectedIgredientInfo.proteins}
+                            fat={selectedIgredientInfo.fat}
+                            carbohydrates={selectedIgredientInfo.carbohydrates}
+                            calories={selectedIgredientInfo.calories}
                         />
                     )}
                 </Modal>

@@ -1,93 +1,104 @@
-import React, { useContext, useState } from 'react';
-import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useDispatch } from 'react-redux';
+import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useDrop } from 'react-dnd'
 import { CurrentBun } from '../CurrentBun';
 import styles from './burgerConstructor.module.css';
 import { Modal } from '../Modal';
 import { OrderDetails } from '../OrderDetails';
-import { DataContext } from '../../services/dataContext';
-import { checkReponse } from '../../utils/checkResponse';
-import { ORDERS_URL } from '../../utils/constants';
+
+import { ConstructorElementWrapper } from '../ConstructorElementWrapper';
+import { useAppSelector } from '../../services/store';
+
+import { fetchOrderThunk } from '../../services/reducers/orderDetails';
+import { UPDATE_ORDER_NUMBER } from '../../services/actions/orderDetails';
 
 const totalPrice = (data) => {
-    return data.reduce((total, { price }) => total + price, 0)
+    const filteredIngredients = data.filter(Boolean);
+
+    if (!filteredIngredients.length) {
+        return 0;
+    }
+
+    return filteredIngredients.reduce((total, { price }) => total + price, 0)
 }
 
 export const BurgerConstructor = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [OrderNumber, setOrderNumber] = useState(null);
-    const [hasError, setError] = useState(false);
-    const data = useContext(DataContext);
-    const defaultBun = data.find(({ type }) => type === 'bun')
-    if (typeof defaultBun == 'undefined') {
-        return <div>Идет загрузка...</div>
-    }
+    const dispatch = useDispatch();
 
-    const ingredientsWithoutBun = data.filter((item) => {
-        return item.type === 'bun' ? false : true;
-    })
+    const orderNumber = useAppSelector((store) => store.orderDetails.order)
+    const hasOrderError = useAppSelector((store) => store.orderDetails.error)
+    const selectedIgredientsIds = useAppSelector((store) => store.burgerConstructor.ingredients)
+    const allIgredients = useAppSelector((store) => store.ingredients.ingredients.reduce((acc, item) => {
+        acc[item._id] = item;
+
+        return acc;
+    }, {}))
+    const selectedBunId = useAppSelector((store) => store.burgerConstructor.bun)
+    const [, drop] = useDrop(() => ({
+        accept: 'ingredientItem',
+        drop: () => ({ name: 'Dustbin' }),
+        collect: (monitor) => ({
+            isOver: monitor.isOver(),
+            canDrop: monitor.canDrop(),
+        }),
+    }))
+
+    const selectedBun = allIgredients[selectedBunId];
+    const ingredientsList = selectedIgredientsIds.map((ingredient) => allIgredients[ingredient])
 
     const handleClick = async () => {
-        await fetch(ORDERS_URL, {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                ingredients: [defaultBun, ...ingredientsWithoutBun].map(({ _id }) => {
-                    return _id
-                })
-            })
-        })
-            .then(checkReponse)
-            .then((data) => {
-                setOrderNumber(data.order.number)
-            })
-            .catch(() => {
-                setError(true)
-            })
-            .finally(() => {
-                setIsModalOpen(true)
-            })
+        dispatch(fetchOrderThunk());
     }
 
     return (
         <div className='container pt-25'>
             <CurrentBun
-                bun={defaultBun}
+                bun={selectedBun}
             >
-                <div className={`${styles.container}`}>
-                    {ingredientsWithoutBun.map((item) => (
-                        <div className={`${styles.row} pr-2`} key={item._id}>
-                            <div className="mr-2">
-                                <DragIcon type="primary" />
-                            </div>
-                            <ConstructorElement
-                                isLocked={false}
-                                text={item.name}
-                                price={item.price}
-                                thumbnail={item.image_mobile}
-                            />
+                <div
+                    className={`${styles.container} ${styles.dropTarget}`}
+                    ref={drop}
+                >
+                    {!ingredientsList.length && (
+                        <div>
+                            <h2 className='text text_type_main-medium mb-6'>
+                                Вы ещё не выбрали ни одного продукта
+                            </h2>
+                            <p className='text text_type_main-medium mb-6'>
+                                Перетащите ингредиенты для формирования заказа
+                            </p>
                         </div>
+                    )}
+                    {ingredientsList.map((item, index) => (
+                        <ConstructorElementWrapper
+                            key={`${item._id}-${index}`}
+                            ingredient={item}
+                            index={index}
+                        />
                     ))}
                 </div>
             </CurrentBun>
             <div className={`${styles.wrapper} text text_type_digits-default mb-1 pt-10`}>
                 <div className={`${styles.sum} mr-10`}>
-                    <span className='text text_type_digits-medium'>{totalPrice([defaultBun, ...ingredientsWithoutBun])}</span>
+                    <span className='text text_type_digits-medium'>
+                        {totalPrice([selectedBun, selectedBun, ...ingredientsList])}
+                    </span>
                     <CurrencyIcon />
                 </div>
-                <Button htmlType="button" type="primary" size="medium" onClick={handleClick}>
+                <Button disabled={!(selectedBun && ingredientsList.length)} htmlType="button" type="primary" size="medium" onClick={handleClick}>
                     Оформить заказ
                 </Button>
             </div>
-            {isModalOpen && (
+            {Boolean(orderNumber) && (
                 <Modal
                     onClose={() => {
-                        setIsModalOpen(false)
+                        dispatch({ type: UPDATE_ORDER_NUMBER, payload: null })
                     }}
                 >
-                    {hasError ?
+                    {hasOrderError ?
                         <p className='text text_type_main-medium mb-6'>Не получилось создать заказ, повторите снова.</p> :
                         <OrderDetails
-                            orderId={OrderNumber}
+                            orderId={orderNumber}
                         />
                     }
                 </Modal>

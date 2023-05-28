@@ -8,12 +8,6 @@
     scroll-behavior: smooth;
 }
 
-.row {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
 .wrapper {
     display: flex;
     align-items: center;
@@ -29,4 +23,8 @@
         height: 33px;
         margin-left: 9px;
     }
+}
+
+.dropTarget {
+    min-height: 500px;
 }
