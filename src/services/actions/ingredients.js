@@ -1,4 +1,5 @@
 import { INGREDIENTS_URL } from '../../utils/constants';
+import { request } from '../../utils/request';
 
 export const FETCH_INGREDIENTS_REQUEST = 'FETCH_INGREDIENTS_REQUEST';
 export const FETCH_INGREDIENTS_SUCCESS = 'FETCH_INGREDIENTS_SUCCESS';
@@ -18,19 +19,13 @@ export const fetchIngredientsFailure = (error) => ({
     payload: error,
 });
 
-export const fetchIngredientsThunk = () => async (dispatch) => {
+export const fetchIngredientsThunk = () => (dispatch) => {
     dispatch({ type: FETCH_INGREDIENTS_REQUEST })
-
-    try {
-        const res = await fetch(INGREDIENTS_URL)
-
-        if (!res.ok) {
-            throw new Error(`Ошибка ${res.status}`);
-        }
-
-        const data = await res.json()
-        dispatch({ type: FETCH_INGREDIENTS_SUCCESS, payload: data.data })
-    } catch (e) {
-        dispatch({ type: FETCH_INGREDIENTS_FAILURE, payload: true })
-    }
+    request(INGREDIENTS_URL)
+        .then((data) => {
+            dispatch({ type: FETCH_INGREDIENTS_SUCCESS, payload: data.data })
+        })
+        .catch(() => {
+            dispatch({ type: FETCH_INGREDIENTS_FAILURE, payload: true })
+        })
 }

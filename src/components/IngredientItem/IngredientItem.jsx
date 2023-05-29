@@ -6,7 +6,6 @@ import { useDrag } from 'react-dnd'
 import { useAppDispatch } from '../../services/store';
 import { ADD_INGREDIENT, SET_BURGER_BUN } from '../../services/actions/burgerConstructor';
 
-
 export const IngredientItem = ({ id, image, type, counter, price, text, onClick }) => {
     const dispatch = useAppDispatch();
     const [{ isDragging }, drag] = useDrag(() => ({

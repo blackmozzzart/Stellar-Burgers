@@ -9,7 +9,7 @@ import { OrderDetails } from '../OrderDetails';
 import { ConstructorElementWrapper } from '../ConstructorElementWrapper';
 import { useAppSelector } from '../../services/store';
 
-import { fetchOrderThunk } from '../../services/reducers/orderDetails';
+import { fetchOrderThunk } from '../../services/actions/orderDetails';
 import { UPDATE_ORDER_NUMBER } from '../../services/actions/orderDetails';
 
 const totalPrice = (data) => {
@@ -44,7 +44,13 @@ export const BurgerConstructor = () => {
     }))
 
     const selectedBun = allIgredients[selectedBunId];
-    const ingredientsList = selectedIgredientsIds.map((ingredient) => allIgredients[ingredient])
+    const ingredientsList = selectedIgredientsIds.map((ingredient) => {
+        const ingredientData = allIgredients[ingredient.id];
+        return {
+            ...ingredientData,
+            uniqId: ingredient.uniqId
+        }
+    })
 
     const handleClick = async () => {
         dispatch(fetchOrderThunk());
@@ -71,7 +77,7 @@ export const BurgerConstructor = () => {
                     )}
                     {ingredientsList.map((item, index) => (
                         <ConstructorElementWrapper
-                            key={`${item._id}-${index}`}
+                            key={item.uniqId}
                             ingredient={item}
                             index={index}
                         />

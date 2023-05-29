@@ -5,7 +5,7 @@ export const SET_BURGER_BUN = 'SET_BURGER_BUN';
 
 export const addIngredient = (ingredient) => ({
   type: ADD_INGREDIENT,
-  payload: ingredient
+  payload: ingredient,
 });
 
 export const removeIngredient = (ingredient) => ({
@@ -14,7 +14,7 @@ export const removeIngredient = (ingredient) => ({
 });
 
 export const moveIngredient = (ingredient) => ({
-  type: REMOVE_INGREDIENT,
+  type: MOVE_INGREDIENT,
   payload: ingredient
 })
 

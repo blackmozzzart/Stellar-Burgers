@@ -23,11 +23,11 @@ export const BurgerIngredients = () => {
     const selectedBunId = useAppSelector(store => store.burgerConstructor.bun)
 
     const igredientsInConstructor = useAppSelector((store) => store.burgerConstructor.ingredients.reduce((acc, item) => {
-        if (!acc[item]) {
-            acc[item] = 0;
+        if (!acc[item.id]) {
+            acc[item.id] = 0;
         }
 
-        acc[item] += 1;
+        acc[item.id] += 1;
         return acc
     }, {}))
     const selectedIgredientInfo = useAppSelector((store) => store.ingredientDetails.selectedIngredient)

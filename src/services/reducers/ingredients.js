@@ -31,20 +31,3 @@ export const ingredientsReducer = (state = initialState, action) => {
             return state;
     }
 };
-
-// Усилитель
-// const ingredientsMiddleware = (store) => (next) => (action) => {
-//     if (action.type === FETCH_INGREDIENTS_REQUEST) {
-//         // Выполнение запроса к API и обработка результатов
-//         fetch('api/ingredients')
-//             .then((response) => response.json())
-//             .then((data) => {
-//                 store.dispatch(fetchIngredientsSuccess(data));
-//             })
-//             .catch((error) => {
-//                 store.dispatch(fetchIngredientsFailure(error));
-//             });
-//     }
-//     return next(action);
-// };
-
