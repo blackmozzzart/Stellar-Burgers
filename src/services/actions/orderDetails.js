@@ -1,5 +1,6 @@
 import { ORDERS_URL } from "../../utils/constants";
 import { request } from "../../utils/request";
+import { clearBurgerConstructor } from "./burgerConstructor";
 
 export const FETCH_ORDER_REQUEST = 'FETCH_ORDER_REQUEST';
 export const FETCH_ORDER_SUCCESS = 'FETCH_ORDER_SUCCESS';
@@ -38,6 +39,7 @@ export const fetchOrderThunk = () => (dispatch, getState) => {
     })
         .then((data) => {
             dispatch({ type: FETCH_ORDER_SUCCESS, payload: data.order.number })
+            dispatch(clearBurgerConstructor())
         })
         .catch(() => {
             dispatch({ type: FETCH_ORDER_FAILURE, payload: true })

@@ -3,8 +3,8 @@ import {
     REMOVE_INGREDIENT,
     SET_BURGER_BUN,
     MOVE_INGREDIENT,
+    CLEAR_BURGER_CONSTRUCTOR,
 } from "../actions/burgerConstructor";
-import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
     ingredients: [],
@@ -16,7 +16,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
         case ADD_INGREDIENT:
             return {
                 ...state,
-                ingredients: [...state.ingredients, { id: action.payload, uniqId: uuidv4() }]
+                ingredients: [...state.ingredients, action.payload]
             };
         case REMOVE_INGREDIENT:
             const newIngredients = [...state.ingredients]
@@ -44,6 +44,8 @@ export const burgerConstructorReducer = (state = initialState, action) => {
                 ...state,
                 bun: action.payload
             };
+        case CLEAR_BURGER_CONSTRUCTOR:
+            return initialState;
         default:
             return state;
     }

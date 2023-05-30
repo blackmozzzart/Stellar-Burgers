@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientItem } from '../IngredientItem/IngredientItem';
 import styles from './burgerIngredients.module.css';
 import { Modal } from '../Modal';
 import { IngredientDetails } from '../IngredientDetails';
+import { InView } from 'react-intersection-observer';
 
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { SET_SELECTED_INGREDIENT } from "../../services/actions/ingredientDetails";
@@ -32,6 +33,8 @@ export const BurgerIngredients = () => {
     }, {}))
     const selectedIgredientInfo = useAppSelector((store) => store.ingredientDetails.selectedIngredient)
 
+    const rootRef = useRef();
+
     const isModalOpen = Boolean(selectedIgredientInfo)
     const groupedIngredients = useMemo(() => groupIngredientsByCategory(ingredientsList), [ingredientsList]);
 
@@ -51,34 +54,38 @@ export const BurgerIngredients = () => {
                     </a>
                 ))}
             </div>
-            <div className={styles.container}>
+            <div className={styles.container} ref={rootRef}>
                 {groupedIngredients.map(([category, ingredients]) => (
-                    <div key={category} id={category} className='mt-10'>
-                        <h3 className='text text_type_main-medium mb-6'>
-                            {categoryMap[category]}
-                        </h3>
-                        <div className={styles.ingredientsWrapper}>
-                            {ingredients.map((ingredient) => {
-                                // выбираем ингредиенты или булку если такой id уже есть
-                                const counter = igredientsInConstructor[ingredient._id] || (selectedBunId === ingredient._id && 1) || null;
+                    <InView root={rootRef.current} key={category} threshold={0.5} onChange={(inView) => {
+                        if (inView) { setCurrentTab(category) }
+                    }}>
+                        <div id={category} className='mt-10'>
+                            <h3 className='text text_type_main-medium mb-6'>
+                                {categoryMap[category]}
+                            </h3>
+                            <div className={styles.ingredientsWrapper}>
+                                {ingredients.map((ingredient) => {
+                                    // выбираем ингредиенты или булку если такой id уже есть
+                                    const counter = igredientsInConstructor[ingredient._id] || (selectedBunId === ingredient._id && 1) || null;
 
-                                return (
-                                    <IngredientItem
-                                        key={ingredient._id}
-                                        id={ingredient._id}
-                                        text={ingredient.name}
-                                        price={ingredient.price}
-                                        image={ingredient.image}
-                                        type={ingredient.type}
-                                        counter={counter}
-                                        onClick={() => {
-                                            dispatch({ type: SET_SELECTED_INGREDIENT, payload: ingredient })
-                                        }}
-                                    />
-                                )
-                            })}
+                                    return (
+                                        <IngredientItem
+                                            key={ingredient._id}
+                                            id={ingredient._id}
+                                            text={ingredient.name}
+                                            price={ingredient.price}
+                                            image={ingredient.image}
+                                            type={ingredient.type}
+                                            counter={counter}
+                                            onClick={() => {
+                                                dispatch({ type: SET_SELECTED_INGREDIENT, payload: ingredient })
+                                            }}
+                                        />
+                                    )
+                                })}
+                            </div>
                         </div>
-                    </div>
+                    </InView>
                 ))}
             </div>
             {isModalOpen && (

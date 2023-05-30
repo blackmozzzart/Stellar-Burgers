@@ -28,6 +28,7 @@ export const BurgerConstructor = () => {
     const orderNumber = useAppSelector((store) => store.orderDetails.order)
     const hasOrderError = useAppSelector((store) => store.orderDetails.error)
     const selectedIgredientsIds = useAppSelector((store) => store.burgerConstructor.ingredients)
+    const isOrderLoading = useAppSelector((store) => store.orderDetails.loading)
     const allIgredients = useAppSelector((store) => store.ingredients.ingredients.reduce((acc, item) => {
         acc[item._id] = item;
 
@@ -92,7 +93,7 @@ export const BurgerConstructor = () => {
                     <CurrencyIcon />
                 </div>
                 <Button disabled={!(selectedBun && ingredientsList.length)} htmlType="button" type="primary" size="medium" onClick={handleClick}>
-                    Оформить заказ
+                    {isOrderLoading ? 'Идет загрузка' : 'Оформить заказ'}
                 </Button>
             </div>
             {Boolean(orderNumber) && (
