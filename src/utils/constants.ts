@@ -12,8 +12,8 @@ export const IngredientShape = PropTypes.shape({
     image: PropTypes.string,
     image_mobile: PropTypes.string,
     image_large: PropTypes.string,
-}).isRequired
+})
 
-export const INGREDIENTS_URL = 'https://norma.nomoreparties.space/api/ingredients';
-
-export const ORDERS_URL = 'https://norma.nomoreparties.space/api/orders';
+export const BASE_URL = 'https://norma.nomoreparties.space/api';
+export const INGREDIENTS_URL = `${BASE_URL}/ingredients`;
+export const ORDERS_URL = `${BASE_URL}/orders`;

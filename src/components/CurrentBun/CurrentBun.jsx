@@ -5,26 +5,31 @@ import { IngredientShape } from '../../utils/constants';
 import styles from './currentBun.module.css';
 
 export const CurrentBun = ({ children, bun }) => {
+    const commonBunProps = {
+        extraClass: 'mr-4',
+        isLocked: true,
+        price: bun?.price,
+        thumbnail: bun?.image_mobile,
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.wrapper}>
-                <ConstructorElement
-                    extraClass='mr-4'
-                    type={'top'}
-                    isLocked={true}
-                    text={`${bun.name} (верх)`}
-                    price={bun.price}
-                    thumbnail={bun.image_mobile}
-                />
+                {bun && (
+                    <ConstructorElement
+                        {...commonBunProps}
+                        type={'top'}
+                        text={`${bun.name} (верх)`}
+                    />
+                )}
                 {children}
-                <ConstructorElement
-                    extraClass='mr-4'
-                    type={'bottom'}
-                    isLocked={true}
-                    text={`${bun.name} (низ)`}
-                    price={bun.price}
-                    thumbnail={bun.image_mobile}
-                />
+                {bun && (
+                    <ConstructorElement
+                        {...commonBunProps}
+                        type={'bottom'}
+                        text={`${bun.name} (низ)`}
+                    />
+                )}
             </div>
         </div>
     )
