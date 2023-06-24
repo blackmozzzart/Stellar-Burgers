@@ -9,6 +9,15 @@ import { useAppDispatch, useAppSelector } from '../../services/store';
 import { BurgerConstructor } from '../BurgerConstructor';
 import { BurgerIngredients } from '../BurgerIngredients/BurgerIngredients';
 import { fetchIngredientsThunk } from '../../services/actions/ingredients';
+import { Route, Routes } from 'react-router-dom';
+import { Login } from '../../pages/login/login';
+import { Register } from '../../pages/register/register';
+import { ForgotPassword } from '../../pages/forgot-password/forgot-password';
+import { ResetPassword } from '../../pages/reset-password/reset-password';
+import { IngredientDetails } from '../IngredientDetails';
+import { Profile } from '../../pages/profile/profile';
+import { NotFound404 } from '../../pages/not-found/not-found';
+import { ProtectedRouteElement } from '../ProtectedRouteElement/ProtectedRouteElement';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -30,14 +39,26 @@ function App() {
           </Button>
         </section>
       ) : (
-        <DndProvider backend={HTML5Backend}>
-          <main className={`container ${styles.columns}`}>
-            <BurgerIngredients />
-            <BurgerConstructor />
-          </main>
-        </DndProvider>
-      )}
-    </div>
+        <Routes>
+          <Route path='/' element={
+            <DndProvider backend={HTML5Backend}>
+              <main className={`container ${styles.columns}`}>
+                <BurgerIngredients />
+                <BurgerConstructor />
+              </main>
+            </DndProvider>} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
+          {/* <Route path='/profile' element={<ProtectedRouteElement element={<Profile />} />} /> */}
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/ingredients/:id' element={<IngredientDetails />} />
+          <Route path='*' element={<NotFound404 />} />
+        </Routes>
+      )
+      }
+    </div >
   );
 }
 

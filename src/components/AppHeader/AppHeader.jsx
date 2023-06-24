@@ -10,7 +10,7 @@ export const AppHeader = () => {
             <div className={`container ${styles.headerInner}`}>
                 <nav className={styles.nav}>
                     <MenuItem
-                        href={'#'}
+                        href={'/'}
                         icon={<BurgerIcon />}
                         text={'Конструктор'}
                     />
@@ -23,7 +23,7 @@ export const AppHeader = () => {
                 <Logo />
                 <nav className={`${styles.nav} ${styles.nav_right}`}>
                     <MenuItem
-                        href={'#'} // заглушка на будущее
+                        href={'/profile'}
                         icon={<ProfileIcon />}
                         text={'Личный кабинет'}
                     />
