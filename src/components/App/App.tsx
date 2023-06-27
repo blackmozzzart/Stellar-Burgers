@@ -9,19 +9,27 @@ import { useAppDispatch, useAppSelector } from '../../services/store';
 import { BurgerConstructor } from '../BurgerConstructor';
 import { BurgerIngredients } from '../BurgerIngredients/BurgerIngredients';
 import { fetchIngredientsThunk } from '../../services/actions/ingredients';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Login } from '../../pages/login/login';
 import { Register } from '../../pages/register/register';
 import { ForgotPassword } from '../../pages/forgot-password/forgot-password';
 import { ResetPassword } from '../../pages/reset-password/reset-password';
-import { IngredientDetails } from '../IngredientDetails';
 import { Profile } from '../../pages/profile/profile';
 import { NotFound404 } from '../../pages/not-found/not-found';
 import { ProtectedRouteElement } from '../ProtectedRouteElement/ProtectedRouteElement';
+import { PublicRouteElement } from '../PublicRouteElement/PublicRouteElement';
+import { Ingredient } from '../../pages/ingredient/ingredient';
 
 function App() {
   const dispatch = useAppDispatch();
   const hasLoadingError = useAppSelector((store) => store.ingredients.error);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const background = location.state && location.state.background;
+
+  const handleModalClose = () => {
+    navigate(-1)
+  }
 
   useEffect(() => {
     dispatch(fetchIngredientsThunk())
@@ -39,7 +47,7 @@ function App() {
           </Button>
         </section>
       ) : (
-        <Routes>
+        <Routes location={background || location}>
           <Route path='/' element={
             <DndProvider backend={HTML5Backend}>
               <main className={`container ${styles.columns}`}>
@@ -47,13 +55,12 @@ function App() {
                 <BurgerConstructor />
               </main>
             </DndProvider>} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/login' element={<PublicRouteElement element={<Login />} />} />
+          <Route path='/register' element={<PublicRouteElement element={<Register />} />} />
+          <Route path='/forgot-password' element={<PublicRouteElement element={<ForgotPassword />} />} />
           <Route path='/reset-password' element={<ResetPassword />} />
-          {/* <Route path='/profile' element={<ProtectedRouteElement element={<Profile />} />} /> */}
-          <Route path='/profile' element={<Profile />} />
-          <Route path='/ingredients/:id' element={<IngredientDetails />} />
+          <Route path='/profile' element={<ProtectedRouteElement element={<Profile />} />} />
+          <Route path='/ingredients/:id' element={<Ingredient />} />
           <Route path='*' element={<NotFound404 />} />
         </Routes>
       )

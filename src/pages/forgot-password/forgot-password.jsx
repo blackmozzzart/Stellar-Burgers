@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react';
 import styles from './forgot-password.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { forgotPasswordRequest } from '../../utils/api';
 
 export const ForgotPassword = () => {
     const [emailValue, setEmailValue] = useState('');
     const inputRef = useRef(null);
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -13,6 +15,10 @@ export const ForgotPassword = () => {
         if (!emailValue) {
             return;
         }
+        forgotPasswordRequest(emailValue)
+            .then(() => {
+                navigate('/reset-password')
+            });
     }
 
     return (

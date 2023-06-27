@@ -1,14 +1,16 @@
 import React, { useState, useRef } from 'react';
 import styles from './login.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { loginThunk } from '../../services/actions/authentication';
 
 export const Login = () => {
     const [emailValue, setEmailValue] = useState('');
     const [passValue, setPassValue] = useState('');
     const inputRef = useRef(null);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -16,12 +18,15 @@ export const Login = () => {
         if (!emailValue || !passValue) {
             return;
         }
-
+        dispatch(loginThunk(emailValue, passValue))
+            .then(() => {
+                navigate('/')
+            });
     }
 
     return (
         <div className={styles.wrapper}>
-            <form className={styles.form}>
+            <form onSubmit={handleSubmit} className={styles.form}>
                 <h1 className={`${styles.title} text text_type_main-medium`}>
                     Вход
                 </h1>

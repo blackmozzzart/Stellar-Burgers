@@ -1,75 +1,35 @@
-import { createContext, useContext, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserRequest, loginRequest, logoutRequest } from "./api";
 import { deleteCookie, setCookie } from "./cookie";
-
-const AuthContext = createContext(undefined);
-
-const fakeAuth = {
-    isAuthenticated: false,
-    signIn(cb) {
-        fakeAuth.isAuthenticated = true;
-        setTimeout(cb, 100); // fake async
-    },
-    signOut(cb) {
-        fakeAuth.isAuthenticated = false;
-        setTimeout(cb, 100);
-    }
-};
-
-export function ProvideAuth({ children }) {
-    const auth = useProvideAuth();
-    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
-}
-
-export function useAuth() {
-    return useContext(AuthContext);
-}
+import { setUser } from "../services/actions/user";
 
 export function useProvideAuth() {
-    const [user, setUser] = useState(null);
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth.user);
 
     const getUser = async () => {
         return await getUserRequest()
-            .then(res => res.json())
-            .then(data => {
+            .then((res) => res.json())
+            .then((data) => {
                 if (data.success) {
-                    setUser({ ...data.user, id: data.user._id });
+                    dispatch(setUser());
                 }
                 return data.success;
             });
     };
 
-    const signIn = async form => {
+    const signIn = async (form) => {
         const data = await loginRequest(form)
-            .then(res => {
+            .then((res) => {
                 let authToken;
-                res.headers.forEach(header => {
-                    if (header.indexOf('Bearer') === 0) {
-                        authToken = header.split('Bearer ')[1];
+                res.headers.forEach((header) => {
+                    if (header.indexOf("Bearer") === 0) {
+                        authToken = header.split("Bearer ")[1];
                     }
                 });
                 if (authToken) {
-                    setCookie('token', authToken);
+                    setCookie("token", authToken);
                 }
-                return res.json();
             })
-            .then(data => data);
-
-        if (data.success) {
-            setUser({ ...data.user, id: data.user._id });
-        }
-    };
-
-    const signOut = async () => {
-        await logoutRequest();
-        setUser(null);
-        deleteCookie('token');
     }
-
-    return {
-        user,
-        getUser,
-        signIn,
-        signOut
-    };
 }

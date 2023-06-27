@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import styles from './profile.module.css';
 import { NavLink, useResolvedPath } from 'react-router-dom';
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { logoutThunk } from '../../services/actions/authentication';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAppSelector } from '../../services/store';
 
 export const Profile = () => {
+    const user = useAppSelector((store) => store.user)
     const url = useResolvedPath('').pathname;
-    const [nameValue, setNameValue] = useState('');
-    const [loginValue, setLoginValue] = useState('');
+    const [nameValue, setNameValue] = useState(user.name);
+    const [loginValue, setLoginValue] = useState(user.email);
     const [passValue, setPassValue] = useState('');
+    const dispatch = useDispatch();
 
     return (
         <div className={styles.wrapper}>
@@ -15,22 +20,25 @@ export const Profile = () => {
                 <ul className={styles.list}>
                     <li className={styles.list_item}>
                         <NavLink
-                            className={`${styles.link} text text_type_main-medium`}
-                            to={`${url}`}>
+                            className={({ isActive }) => `${isActive ? styles.link_active : ''} ${styles.link} text text_type_main-medium`}
+                            to={`${url}`}
+                        >
                             Профиль
                         </NavLink>
                     </li>
                     <li>
                         <NavLink
-                            className={`${styles.link} text text_type_main-medium`}
+                            className={({ isActive }) => `${isActive ? styles.link_active : ''} ${styles.link} text text_type_main-medium`}
                             to={`${url}/orders`}>
                             История заказов
                         </NavLink>
                     </li>
                     <li>
                         <NavLink
-                            className={`${styles.link} text text_type_main-medium`}
-                            to='/login'>
+                            className={({ isActive }) => `${isActive ? styles.link_active : ''} ${styles.link} text text_type_main-medium`}
+                            to='/login' onClick={() => {
+                                dispatch(logoutThunk())
+                            }}>
                             Выход
                         </NavLink>
                     </li>

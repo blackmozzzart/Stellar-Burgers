@@ -9,6 +9,7 @@ import { InView } from 'react-intersection-observer';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { SET_SELECTED_INGREDIENT } from "../../services/actions/ingredientDetails";
 import { groupIngredientsByCategory } from '../../utils/groupIngredientsByCategory';
+import { useNavigate } from 'react-router-dom';
 
 const categoryMap = {
     bun: 'Булки',
@@ -17,7 +18,8 @@ const categoryMap = {
 }
 
 export const BurgerIngredients = () => {
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const [currentTab, setCurrentTab] = useState('bun')
     const ingredientsList = useAppSelector(store => store.ingredients.ingredients)
@@ -79,6 +81,7 @@ export const BurgerIngredients = () => {
                                             counter={counter}
                                             onClick={() => {
                                                 dispatch({ type: SET_SELECTED_INGREDIENT, payload: ingredient })
+                                                navigate(`/ingredients/${ingredient._id}`)
                                             }}
                                         />
                                     )

@@ -1,17 +1,18 @@
 import { checkResponse } from './checkResponse';
+import { BASE_URL } from './constants';
 
 export const loginRequest = async (email, password) => {
-    return await fetch('https://norma.nomoreparties.space/api/auth/login', {
+    return await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email, password }),
-    }).then((res) => checkResponse(res));
+    }).then(checkResponse)
 };
 
 export const registerRequest = async (email, name, password) => {
-    return await fetch('https://norma.nomoreparties.space/api/auth/register', {
+    return await fetch(`${BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -20,14 +21,27 @@ export const registerRequest = async (email, name, password) => {
     }).then(checkResponse);
 }
 
-// export const sendEmailRequest = async () => {
-//     return await fetch('', {
-
-//     }).then(checkResponse)
-// }
+export const forgotPasswordRequest = async (email) => {
+    return await fetch(`${BASE_URL}/password-reset`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+    }).then(checkResponse)
+}
+export const resetPasswordRequest = async (password, token) => {
+    return await fetch(`${BASE_URL}/password-reset/reset`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ password, token })
+    }).then(checkResponse)
+}
 
 export const refreshToken = async (refreshToken) => {
-    return await fetch('https://norma.nomoreparties.space/api/auth/token', {
+    return await fetch(`${BASE_URL}/auth/token`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -37,7 +51,7 @@ export const refreshToken = async (refreshToken) => {
 }
 
 export const logoutRequest = async (refreshToken) => {
-    return await fetch('https://norma.nomoreparties.space/api/auth/logout', {
+    return await fetch(`${BASE_URL}/auth/logout`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -45,11 +59,11 @@ export const logoutRequest = async (refreshToken) => {
         body: JSON.stringify({
             'token': refreshToken
         }),
-    }).then((res) => checkResponse(res));
+    }).then(checkResponse)
 };
 
 export const getUserRequest = async (token) => {
-    return await fetch('https://norma.nomoreparties.space/api/auth/user', {
+    return await fetch(`${BASE_URL}/auth/user`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -59,7 +73,7 @@ export const getUserRequest = async (token) => {
 }
 
 export const changeUserRequest = async (name, email, password, token) => {
-    return await fetch('https://norma.nomoreparties.space/api/auth/user', {
+    return await fetch(`${BASE_URL}/auth/user`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',

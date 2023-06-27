@@ -1,13 +1,17 @@
 import React, { useState, useRef } from 'react';
 import styles from './register.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { registerThunk } from '../../services/actions/authentication';
+import { useDispatch } from 'react-redux';
 
 export const Register = () => {
     const [nameValue, setNameValue] = useState('');
     const [emailValue, setEmailValue] = useState('');
     const [passValue, setPassValue] = useState('');
     const inputRef = useRef();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -15,6 +19,10 @@ export const Register = () => {
         if (!nameValue || !emailValue || !passValue) {
             return;
         }
+        dispatch(registerThunk(emailValue, nameValue, passValue))
+            .then(() => {
+                navigate('/')
+            });
     }
 
     const passChange = (e) => {

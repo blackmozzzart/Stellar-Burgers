@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import styles from './reset-password.module.css';
 import { Link } from 'react-router-dom';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { resetPasswordRequest } from '../../utils/api';
 
 export const ResetPassword = () => {
     const [codeValue, setCodeValue] = useState('');
@@ -14,6 +15,7 @@ export const ResetPassword = () => {
         if (!passValue || !codeValue) {
             return;
         }
+        resetPasswordRequest(passValue, codeValue)
     };
 
     return (
