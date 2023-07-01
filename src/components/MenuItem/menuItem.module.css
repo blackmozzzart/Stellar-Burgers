@@ -9,7 +9,12 @@
     }
 }
 
-.item:active, .item:hover {
+.item_active {
+    color: #fff;
+}
+
+.item:active,
+.item:hover {
     color: #F2F2F3;
 
     & svg {

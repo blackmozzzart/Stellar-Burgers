@@ -1,1 +1,1 @@
-export { ConstructorElementWrapper } from './ConstructorElementWrapper'
+export { ConstructorElementWrapper } from './ConstructorElementWrapper';
