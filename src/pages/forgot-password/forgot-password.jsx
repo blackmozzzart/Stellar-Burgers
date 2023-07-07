@@ -1,12 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './forgot-password.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { forgotPasswordRequest } from '../../utils/api';
 
 export const ForgotPassword = () => {
     const [emailValue, setEmailValue] = useState('');
-    const inputRef = useRef(null);
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -28,16 +27,11 @@ export const ForgotPassword = () => {
                     Восстановление пароля
                 </h1>
                 <div className='mb-6'>
-                    <Input
-                        value={emailValue}
-                        type={'text'}
-                        placeholder={'Укажите e-mail'}
+                    <EmailInput
                         onChange={(e) => setEmailValue(e.target.value)}
+                        value={emailValue}
+                        placeholder={'Укажите e-mail'}
                         name={'e-mail'}
-                        error={false}
-                        ref={inputRef}
-                        errorText={'Ошибка'}
-                        size={'default'}
                     />
                 </div>
                 <Button type='primary' size='medium' htmlType='submit'>

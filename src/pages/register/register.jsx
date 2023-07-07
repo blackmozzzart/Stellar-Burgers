@@ -2,8 +2,9 @@ import React, { useState, useRef } from 'react';
 import styles from './register.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
-import { registerThunk } from '../../services/actions/authentication';
+import { registerThunk } from '../../services/actions/user';
 import { useDispatch } from 'react-redux';
+import { ROUTE_LOGIN } from '../../utils/constants';
 
 export const Register = () => {
     const [nameValue, setNameValue] = useState('');
@@ -55,7 +56,7 @@ export const Register = () => {
                         type={'text'}
                         placeholder={'E-mail'}
                         onChange={(e) => setEmailValue(e.target.value)}
-                        name={'e-mail'}
+                        name={'email'}
                         error={false}
                         ref={inputRef}
                         errorText={'Ошибка'}
@@ -75,7 +76,7 @@ export const Register = () => {
             </form>
             <p className='text text_type_main-default text_color_inactive'>
                 {'Уже зарегистрированы? '}
-                <Link className={styles.link} to='/login'>
+                <Link className={styles.link} to={ROUTE_LOGIN}>
                     Войти
                 </Link>
             </p>

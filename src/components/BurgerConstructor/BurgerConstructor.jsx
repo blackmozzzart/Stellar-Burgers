@@ -36,6 +36,7 @@ export const BurgerConstructor = () => {
 
         return acc;
     }, {}))
+
     const selectedBunId = useAppSelector((store) => store.burgerConstructor.bun)
     const [, drop] = useDrop(() => ({
         accept: 'ingredientItem',
@@ -61,8 +62,6 @@ export const BurgerConstructor = () => {
         } else {
             navigate('/login');
         }
-
-
     }
 
     return (

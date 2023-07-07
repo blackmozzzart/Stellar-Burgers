@@ -3,6 +3,7 @@ import styles from './reset-password.module.css';
 import { Link } from 'react-router-dom';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { resetPasswordRequest } from '../../utils/api';
+import { ROUTE_LOGIN } from '../../utils/constants';
 
 export const ResetPassword = () => {
     const [codeValue, setCodeValue] = useState('');
@@ -52,7 +53,7 @@ export const ResetPassword = () => {
             </form>
             <p className='text text_type_main-default text_color_inactive'>
                 {'Вспомнили пароль? '}
-                <Link className={styles.link} to='/login'>
+                <Link className={styles.link} to={ROUTE_LOGIN}>
                     Войти
                 </Link>
             </p>

@@ -1,16 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import styles from './login.module.css';
-import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useNavigate } from 'react-router-dom';
+import { LOGIN_FAILURE, loginThunk } from '../../services/actions/user';
 import { useDispatch } from 'react-redux';
-import { loginThunk } from '../../services/actions/authentication';
+import { useAppSelector } from '../../services/store';
+import { ROUTE_FORGOT_PASSWORD, ROUTE_REGISTER } from '../../utils/constants';
 
 export const Login = () => {
     const [emailValue, setEmailValue] = useState('');
     const [passValue, setPassValue] = useState('');
-    const inputRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const isError = useAppSelector((store) => store.user.loginRequestFailed)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -21,7 +23,13 @@ export const Login = () => {
         dispatch(loginThunk(emailValue, passValue))
             .then(() => {
                 navigate('/')
-            });
+            })
+            .catch(() => {
+                dispatch({
+                    type: LOGIN_FAILURE,
+                    payload: false
+                })
+            })
     }
 
     return (
@@ -30,17 +38,12 @@ export const Login = () => {
                 <h1 className={`${styles.title} text text_type_main-medium`}>
                     Вход
                 </h1>
+                {isError && <h3>Неправильный логин или пароль!</h3>}
                 <div className='mt-6 mb-6'>
-                    <Input
+                    <EmailInput
                         value={emailValue}
-                        type={'text'}
-                        placeholder={'E-mail'}
                         onChange={(e) => setEmailValue(e.target.value)}
                         name={'e-mail'}
-                        error={false}
-                        ref={inputRef}
-                        errorText={'Ошибка'}
-                        size={'default'}
                     />
                 </div>
                 <div className='mb-6'>
@@ -56,13 +59,13 @@ export const Login = () => {
             </form>
             <p className='text text_type_main-default text_color_inactive'>
                 {'Вы - новый пользователь? '}
-                <Link className={styles.link} to='/register'>
+                <Link className={styles.link} to={ROUTE_REGISTER}>
                     Зарегистрироваться
                 </Link>
             </p>
             <p className='text text_type_main-default text_color_inactive mt-4'>
                 {'Забыли пароль? '}
-                <Link className={styles.link} to='/forgot-password'>
+                <Link className={styles.link} to={ROUTE_FORGOT_PASSWORD}>
                     Восстановить пароль
                 </Link>
             </p>

@@ -1,9 +1,7 @@
 .wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
     width: 100%;
-    max-width: 1240px;
     padding-top: 40px;
 }
 
@@ -38,17 +36,4 @@
 
 .link:hover {
     opacity: 0.8;
-}
-
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    padding-top: 140px;
-}
-
-.buttons_container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }

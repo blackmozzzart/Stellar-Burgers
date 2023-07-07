@@ -16,7 +16,6 @@ const categoryMap = {
 
 export const BurgerIngredients = () => {
     const location = useLocation();
-
     const [currentTab, setCurrentTab] = useState('bun')
     const ingredientsList = useAppSelector(store => store.ingredients.ingredients)
     const selectedBunId = useAppSelector(store => store.burgerConstructor.bun)
@@ -60,7 +59,6 @@ export const BurgerIngredients = () => {
                             </h3>
                             <div className={styles.ingredientsWrapper}>
                                 {ingredients.map((ingredient) => {
-                                    // выбираем ингредиенты или булку если такой id уже есть
                                     const counter = igredientsInConstructor[ingredient._id] || (selectedBunId === ingredient._id && 1) || null;
 
                                     return (

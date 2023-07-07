@@ -1,5 +1,6 @@
 import { checkResponse } from './checkResponse';
 import { BASE_URL } from './constants';
+import { fetchWithRefresh } from './fetchWithRefresh';
 
 export const loginRequest = async (email, password) => {
     return await fetch(`${BASE_URL}/auth/login`, {
@@ -14,9 +15,14 @@ export const loginRequest = async (email, password) => {
 export const registerRequest = async (email, name, password) => {
     return await fetch(`${BASE_URL}/auth/register`, {
         method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
         body: JSON.stringify({ email, name, password }),
     }).then(checkResponse);
 }
@@ -40,16 +46,6 @@ export const resetPasswordRequest = async (password, token) => {
     }).then(checkResponse)
 }
 
-export const refreshToken = async (refreshToken) => {
-    return await fetch(`${BASE_URL}/auth/token`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 'token': refreshToken }),
-    }).then(checkResponse);
-}
-
 export const logoutRequest = async (refreshToken) => {
     return await fetch(`${BASE_URL}/auth/logout`, {
         method: 'POST',
@@ -63,26 +59,36 @@ export const logoutRequest = async (refreshToken) => {
 };
 
 export const getUserRequest = async (token) => {
-    return await fetch(`${BASE_URL}/auth/user`, {
+    return await fetchWithRefresh(`${BASE_URL}/auth/user`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
-            'authorization': token,
+            'authorization': sessionStorage.getItem('accessToken'),
         },
-    }).then(checkResponse);
+    })
 }
 
-export const changeUserRequest = async (name, email, password, token) => {
-    return await fetch(`${BASE_URL}/auth/user`, {
+export const updateUserRequest = async (name, email, password) => {
+    return await fetchWithRefresh(`${BASE_URL}/auth/user`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
-            'authorization': token
+            'authorization': sessionStorage.getItem('accessToken')
         },
         body: JSON.stringify({
             'name': name,
             'email': email,
-            'password': password
+            'password': password,
         })
+    });
+}
+
+export const refreshToken = async (refreshToken) => {
+    return await fetch(`${BASE_URL}/auth/token`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'token': refreshToken }),
     }).then(checkResponse);
 }
