@@ -24,7 +24,6 @@ export const ProfileForm = () => {
     const onSubmit = (e) => {
         e.preventDefault();
         dispatch(updateUserThunk(values));
-        dispatch(refreshTokenThunk(values))
         setValues({ ...values, password: '' });
         setIsChanged(false);
     }

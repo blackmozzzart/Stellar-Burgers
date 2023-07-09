@@ -17,6 +17,8 @@ export const IngredientShape = PropTypes.shape({
 export const BASE_URL = 'https://norma.nomoreparties.space/api';
 export const INGREDIENTS_URL = `${BASE_URL}/ingredients`;
 export const ORDERS_URL = `${BASE_URL}/orders`;
+export const unauthorizedError = 401;
+export const tokenExpiredError = 403;
 
 export const ROUTE_LOGIN = '/login';
 export const ROUTE_REGISTER = '/register';

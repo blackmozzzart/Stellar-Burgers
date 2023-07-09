@@ -29,13 +29,19 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 export const REFRESH_TOKEN_SUCCESS = 'REFRESH_TOKEN_SUCCESS';
 export const REFRESH_TOKEN_FAILURE = 'REFRESH_TOKEN_FAILURE';
 
-function saveUser(data) {
+export function saveUser(data) {
     if (data.user) {
         sessionStorage.setItem('user', JSON.stringify(data.user))
     }
-    sessionStorage.setItem('accessToken', data.accessToken)
-    localStorage.setItem('refreshToken', data.refreshToken)
 }
+
+export function saveToken(data) {
+    if (data.accessToken && data.refreshToken) {
+        sessionStorage.setItem('accessToken', data.accessToken)
+        localStorage.setItem('refreshToken', data.refreshToken)
+    }
+}
+
 
 export const setUser = (email, name, password, accessToken) => ({
     type: SET_USER,
@@ -60,6 +66,7 @@ export const registerThunk = (email, name, password) => (dispatch, getState) => 
             })
             dispatch(setUser(data.user.email, data.user.name))
             saveUser(data)
+            saveToken(data)
         })
         .catch(() => dispatch({
             type: REGISTRATION_FAILURE,
@@ -79,6 +86,7 @@ export const loginThunk = (email, password) => (dispatch) => {
             })
             dispatch(setUser(data.user.email, data.user.name))
             saveUser(data)
+            saveToken(data)
         })
 }
 
@@ -92,6 +100,7 @@ export const logoutThunk = () => (dispatch) => {
                 payload: true
             })
             dispatch(removeUser())
+            sessionStorage.removeItem('user')
             sessionStorage.removeItem('accessToken')
             localStorage.removeItem('refreshToken')
         })
@@ -145,12 +154,13 @@ export const updateUserThunk = ({ name, email, password }) => (dispatch) => {
                 type: UPDATE_USER_SUCCESS,
                 payload: true
             })
-            localStorage.getItem('accessToken')
-            dispatch(setUser(data.user.email, data.user.name, data.user.password, data.user.accessToken))
+            dispatch(setUser(data.user.email, data.user.name, data.user.password))
             saveUser(data)
         })
-        .catch(() => dispatch({
-            type: UPDATE_USER_FAILURE,
-            payload: false
-        }))
+        .catch((error) => {
+            dispatch({
+                type: UPDATE_USER_FAILURE,
+                payload: false
+            })
+        })
 }

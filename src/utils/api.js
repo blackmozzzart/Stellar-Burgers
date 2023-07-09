@@ -63,7 +63,7 @@ export const getUserRequest = async (token) => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
-            'authorization': sessionStorage.getItem('accessToken'),
+            'authorization': sessionStorage.getItem('accessToken')
         },
     })
 }
