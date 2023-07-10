@@ -2,13 +2,11 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IngredientItem } from '../IngredientItem/IngredientItem';
 import styles from './burgerIngredients.module.css';
-import { Modal } from '../Modal';
-import { IngredientDetails } from '../IngredientDetails';
 import { InView } from 'react-intersection-observer';
 
-import { useAppDispatch, useAppSelector } from '../../services/store';
-import { SET_SELECTED_INGREDIENT } from "../../services/actions/ingredientDetails";
+import { useAppSelector } from '../../services/store';
 import { groupIngredientsByCategory } from '../../utils/groupIngredientsByCategory';
+import { Link, useLocation } from 'react-router-dom';
 
 const categoryMap = {
     bun: 'Булки',
@@ -17,8 +15,7 @@ const categoryMap = {
 }
 
 export const BurgerIngredients = () => {
-    const dispatch = useAppDispatch()
-
+    const location = useLocation();
     const [currentTab, setCurrentTab] = useState('bun')
     const ingredientsList = useAppSelector(store => store.ingredients.ingredients)
     const selectedBunId = useAppSelector(store => store.burgerConstructor.bun)
@@ -31,11 +28,8 @@ export const BurgerIngredients = () => {
         acc[item.id] += 1;
         return acc
     }, {}))
-    const selectedIgredientInfo = useAppSelector((store) => store.ingredientDetails.selectedIngredient)
 
     const rootRef = useRef();
-
-    const isModalOpen = Boolean(selectedIgredientInfo)
     const groupedIngredients = useMemo(() => groupIngredientsByCategory(ingredientsList), [ingredientsList]);
 
     return (
@@ -65,22 +59,23 @@ export const BurgerIngredients = () => {
                             </h3>
                             <div className={styles.ingredientsWrapper}>
                                 {ingredients.map((ingredient) => {
-                                    // выбираем ингредиенты или булку если такой id уже есть
                                     const counter = igredientsInConstructor[ingredient._id] || (selectedBunId === ingredient._id && 1) || null;
 
                                     return (
-                                        <IngredientItem
+                                        <Link
                                             key={ingredient._id}
-                                            id={ingredient._id}
-                                            text={ingredient.name}
-                                            price={ingredient.price}
-                                            image={ingredient.image}
-                                            type={ingredient.type}
-                                            counter={counter}
-                                            onClick={() => {
-                                                dispatch({ type: SET_SELECTED_INGREDIENT, payload: ingredient })
-                                            }}
-                                        />
+                                            className={styles.link}
+                                            to={`/ingredients/${ingredient._id}`}
+                                            state={{ backgroundLocation: location }}>
+                                            <IngredientItem
+                                                id={ingredient._id}
+                                                text={ingredient.name}
+                                                price={ingredient.price}
+                                                image={ingredient.image}
+                                                type={ingredient.type}
+                                                counter={counter}
+                                            />
+                                        </Link>
                                     )
                                 })}
                             </div>
@@ -88,25 +83,6 @@ export const BurgerIngredients = () => {
                     </InView>
                 ))}
             </div>
-            {isModalOpen && (
-                <Modal
-                    onClose={() => {
-                        dispatch({ type: SET_SELECTED_INGREDIENT, payload: null })
-                    }}
-                    title='Детали ингридиента'
-                >
-                    {selectedIgredientInfo && (
-                        <IngredientDetails
-                            image={selectedIgredientInfo.image}
-                            name={selectedIgredientInfo.name}
-                            proteins={selectedIgredientInfo.proteins}
-                            fat={selectedIgredientInfo.fat}
-                            carbohydrates={selectedIgredientInfo.carbohydrates}
-                            calories={selectedIgredientInfo.calories}
-                        />
-                    )}
-                </Modal>
-            )}
         </div>
     )
 }

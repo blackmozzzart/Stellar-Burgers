@@ -11,6 +11,7 @@ import { useAppSelector } from '../../services/store';
 
 import { fetchOrderThunk } from '../../services/actions/orderDetails';
 import { UPDATE_ORDER_NUMBER } from '../../services/actions/orderDetails';
+import { useNavigate } from 'react-router-dom';
 
 const totalPrice = (data) => {
     const filteredIngredients = data.filter(Boolean);
@@ -24,7 +25,8 @@ const totalPrice = (data) => {
 
 export const BurgerConstructor = () => {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
+    const isLoggedIn = useAppSelector((store) => store.user.isLoggedIn)
     const orderNumber = useAppSelector((store) => store.orderDetails.order)
     const hasOrderError = useAppSelector((store) => store.orderDetails.error)
     const selectedIgredientsIds = useAppSelector((store) => store.burgerConstructor.ingredients)
@@ -34,6 +36,7 @@ export const BurgerConstructor = () => {
 
         return acc;
     }, {}))
+
     const selectedBunId = useAppSelector((store) => store.burgerConstructor.bun)
     const [, drop] = useDrop(() => ({
         accept: 'ingredientItem',
@@ -54,7 +57,11 @@ export const BurgerConstructor = () => {
     })
 
     const handleClick = async () => {
-        dispatch(fetchOrderThunk());
+        if (isLoggedIn) {
+            dispatch(fetchOrderThunk());
+        } else {
+            navigate('/login');
+        }
     }
 
     return (
