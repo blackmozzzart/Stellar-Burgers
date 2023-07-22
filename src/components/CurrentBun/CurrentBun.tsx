@@ -1,10 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientShape } from '../../utils/constants';
 import styles from './currentBun.module.css';
+import { TIngredient } from '../../services/types/types';
 
-export const CurrentBun = ({ children, bun }) => {
+interface CurrentBunProps {
+    children: ReactNode;
+    bun: TIngredient;
+}
+
+export const CurrentBun: React.FC<CurrentBunProps> = ({ children, bun }) => {
     const commonBunProps = {
         extraClass: 'mr-4',
         isLocked: true,
@@ -33,9 +37,4 @@ export const CurrentBun = ({ children, bun }) => {
             </div>
         </div>
     )
-}
-
-CurrentBun.propTypes = {
-    children: PropTypes.element,
-    bun: IngredientShape
 }

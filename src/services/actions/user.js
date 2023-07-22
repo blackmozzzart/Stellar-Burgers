@@ -1,3 +1,4 @@
+import { redirect } from 'react-router-dom';
 import { getUserRequest, loginRequest, logoutRequest, refreshToken, registerRequest, updateUserRequest } from "../../utils/api";
 
 export const SET_USER = 'SET_USER';
@@ -67,6 +68,7 @@ export const registerThunk = (email, name, password) => (dispatch, getState) => 
             dispatch(setUser(data.user.email, data.user.name))
             saveUser(data)
             saveToken(data)
+            redirect('/')
         })
         .catch(() => dispatch({
             type: REGISTRATION_FAILURE,
@@ -74,7 +76,7 @@ export const registerThunk = (email, name, password) => (dispatch, getState) => 
         }))
 }
 
-export const loginThunk = (email, password) => (dispatch) => {
+export const loginThunk = (email, password) => async (dispatch) => {
     return loginRequest(
         email,
         password,
@@ -87,6 +89,14 @@ export const loginThunk = (email, password) => (dispatch) => {
             dispatch(setUser(data.user.email, data.user.name))
             saveUser(data)
             saveToken(data)
+
+            redirect('/')
+        })
+        .catch(() => {
+            dispatch({
+                type: LOGIN_FAILURE,
+                payload: false
+            })
         })
 }
 
@@ -126,8 +136,10 @@ export const refreshTokenThunk = () => (dispatch) => {
             payload: false
         }))
 }
-export const checkUserThunk = (accessToken) => (dispatch) => {
-    if (localStorage.getItem('accessToken')) {
+export const checkUserThunk = () => (dispatch) => {
+    const accessToken = localStorage.getItem('accessToken')
+
+    if (accessToken) {
         dispatch(getUserRequest(accessToken))
             .then((data) => {
                 dispatch({

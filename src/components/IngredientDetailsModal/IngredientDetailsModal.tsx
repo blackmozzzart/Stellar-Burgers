@@ -3,12 +3,13 @@ import { useAppSelector } from "../../services/store"
 import { useNavigate, useParams } from "react-router-dom";
 import { Modal } from "../Modal";
 import { IngredientDetails } from "../IngredientDetails/IngredientDetails";
+import { TIngredient } from '../../services/types/types';
 
-export const IngredientDetailsModal = () => {
+export const IngredientDetailsModal: React.FC = () => {
     const navigate = useNavigate();
     const params = useParams();
     const ingredient = useAppSelector((store) => {
-        return store.ingredients.ingredients.find((ingredient) => ingredient._id === params.id)
+        return store.ingredients.ingredients.find((ingredient: TIngredient) => ingredient._id === params.id)
     });
 
     if (!ingredient) {

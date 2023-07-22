@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux';
 import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrop } from 'react-dnd'
 import { CurrentBun } from '../CurrentBun';
@@ -7,13 +6,16 @@ import { Modal } from '../Modal';
 import { OrderDetails } from '../OrderDetails';
 
 import { ConstructorElementWrapper } from '../ConstructorElementWrapper';
-import { useAppSelector } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 import { fetchOrderThunk } from '../../services/actions/orderDetails';
 import { UPDATE_ORDER_NUMBER } from '../../services/actions/orderDetails';
 import { useNavigate } from 'react-router-dom';
+import { TIngredient } from '../../services/types/types';
 
-const totalPrice = (data) => {
+type TMapIngredients = Record<string, TIngredient>
+
+const totalPrice = (data: (TIngredient[])) => {
     const filteredIngredients = data.filter(Boolean);
 
     if (!filteredIngredients.length) {
@@ -23,19 +25,19 @@ const totalPrice = (data) => {
     return filteredIngredients.reduce((total, { price }) => total + price, 0)
 }
 
-export const BurgerConstructor = () => {
-    const dispatch = useDispatch();
+export const BurgerConstructor: React.FC = () => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const isLoggedIn = useAppSelector((store) => store.user.isLoggedIn)
     const orderNumber = useAppSelector((store) => store.orderDetails.order)
     const hasOrderError = useAppSelector((store) => store.orderDetails.error)
     const selectedIgredientsIds = useAppSelector((store) => store.burgerConstructor.ingredients)
     const isOrderLoading = useAppSelector((store) => store.orderDetails.loading)
-    const allIgredients = useAppSelector((store) => store.ingredients.ingredients.reduce((acc, item) => {
+    const allIgredients = useAppSelector((store) => store.ingredients.ingredients.reduce((acc: TMapIngredients, item: TIngredient) => {
         acc[item._id] = item;
 
         return acc;
-    }, {}))
+    }, {} as TMapIngredients))
 
     const selectedBunId = useAppSelector((store) => store.burgerConstructor.bun)
     const [, drop] = useDrop(() => ({
@@ -97,7 +99,7 @@ export const BurgerConstructor = () => {
                     <span className='text text_type_digits-medium'>
                         {totalPrice([selectedBun, selectedBun, ...ingredientsList])}
                     </span>
-                    <CurrencyIcon />
+                    <CurrencyIcon type='primary' />
                 </div>
                 <Button disabled={!(selectedBun && ingredientsList.length)} htmlType="button" type="primary" size="medium" onClick={handleClick}>
                     {isOrderLoading ? 'Идет загрузка' : 'Оформить заказ'}
@@ -119,7 +121,4 @@ export const BurgerConstructor = () => {
             )}
         </div>
     )
-}
-
-BurgerConstructor.propTypes = {
 }

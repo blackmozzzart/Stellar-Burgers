@@ -71,7 +71,7 @@ export const ConstructorElementWrapper = ({ ingredient, index }: ConstructorElem
 
   return (
     <div className={`${styles.row} pr-2`} ref={ref} style={{ opacity }}>
-      <div className="mr-2">
+      <div className='mr-2'>
         <DragIcon type="primary" />
       </div>
       <ConstructorElement

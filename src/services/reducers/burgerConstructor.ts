@@ -1,3 +1,4 @@
+import { AnyAction } from "redux";
 import {
     ADD_INGREDIENT,
     REMOVE_INGREDIENT,
@@ -5,18 +6,24 @@ import {
     MOVE_INGREDIENT,
     CLEAR_BURGER_CONSTRUCTOR,
 } from "../actions/burgerConstructor";
+import { TIngredient } from "../types/types";
 
-const initialState = {
+interface IInitialState {
+    ingredients: TIngredient[];
+    bun: null | TIngredient;
+}
+
+const initialState: IInitialState = {
     ingredients: [],
     bun: null
 };
 
-export const burgerConstructorReducer = (state = initialState, action) => {
+export const burgerConstructorReducer = (state = initialState, action: AnyAction) => {
     switch (action.type) {
         case ADD_INGREDIENT:
             return {
                 ...state,
-                ingredients: [...state.ingredients, action.payload]
+                ingredients: [...state.ingredients, action.payload as TIngredient]
             };
         case REMOVE_INGREDIENT:
             const newIngredients = [...state.ingredients]

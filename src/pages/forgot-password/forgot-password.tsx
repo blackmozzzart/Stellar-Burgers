@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import styles from './forgot-password.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { forgotPasswordRequest } from '../../utils/api';
 
-export const ForgotPassword = () => {
+export const ForgotPassword: React.FC = () => {
     const [emailValue, setEmailValue] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!emailValue) {

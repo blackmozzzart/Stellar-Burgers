@@ -7,8 +7,11 @@ import { InView } from 'react-intersection-observer';
 import { useAppSelector } from '../../services/store';
 import { groupIngredientsByCategory } from '../../utils/groupIngredientsByCategory';
 import { Link, useLocation } from 'react-router-dom';
+import { TIngredient } from '../../services/types/types';
 
-const categoryMap = {
+type TingredientsInConstructor = Record<string, number>
+
+const categoryMap: Record<string, string> = {
     bun: 'Булки',
     sauce: 'Соусы',
     main: 'Начинки',
@@ -20,16 +23,16 @@ export const BurgerIngredients = () => {
     const ingredientsList = useAppSelector(store => store.ingredients.ingredients)
     const selectedBunId = useAppSelector(store => store.burgerConstructor.bun)
 
-    const igredientsInConstructor = useAppSelector((store) => store.burgerConstructor.ingredients.reduce((acc, item) => {
+    const ingredientsInConstructor = useAppSelector((store) => store.burgerConstructor.ingredients.reduce((acc: TingredientsInConstructor, item: TIngredient) => {
         if (!acc[item.id]) {
             acc[item.id] = 0;
         }
 
         acc[item.id] += 1;
         return acc
-    }, {}))
+    }, {} as TingredientsInConstructor))
 
-    const rootRef = useRef();
+    const rootRef = useRef<HTMLDivElement>(null);
     const groupedIngredients = useMemo(() => groupIngredientsByCategory(ingredientsList), [ingredientsList]);
 
     return (
@@ -59,7 +62,7 @@ export const BurgerIngredients = () => {
                             </h3>
                             <div className={styles.ingredientsWrapper}>
                                 {ingredients.map((ingredient) => {
-                                    const counter = igredientsInConstructor[ingredient._id] || (selectedBunId === ingredient._id && 1) || null;
+                                    const counter = ingredientsInConstructor[ingredient._id] || (selectedBunId === ingredient._id && 1) || null;
 
                                     return (
                                         <Link
@@ -87,5 +90,3 @@ export const BurgerIngredients = () => {
     )
 }
 
-BurgerIngredients.propTypes = {
-}

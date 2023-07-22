@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profileForm.module.css';
-import { useAppSelector } from '../../services/store';
-import { refreshTokenThunk, updateUserThunk } from '../../services/actions/user';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+import { updateUserThunk } from '../../services/actions/user';
 import { useForm } from '../../hooks/useForm';
+import { TUser } from '../../services/types/types';
 
-export const ProfileForm = () => {
-    const user = useAppSelector((store) => store.user);
+export const ProfileForm: React.FC = () => {
+    const user = useAppSelector((store) => store.user) as TUser;
     const [isChanged, setIsChanged] = useState(false);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const { values, handleChange, setValues } = useForm({ name: user.name, email: user.email, password: user.password });
 
-    const onChange = (e) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         handleChange(e);
         setIsChanged(true);
     }
@@ -21,7 +21,7 @@ export const ProfileForm = () => {
         setIsChanged(false);
     }
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(updateUserThunk(values));
         setValues({ ...values, password: '' });
@@ -30,42 +30,41 @@ export const ProfileForm = () => {
 
     useEffect(() => {
         if (user) {
-            setValues({ ...values, name: user.name, email: user.email })
+            setValues((values: any) => ({ ...values, name: user.name, email: user.email }))
         }
-    }, [user]);
+    }, [user, setValues]);
 
     return (
         <form onSubmit={onSubmit} className={styles.form}>
             <Input
                 onChange={onChange}
-                type={"text"}
-                placeholder={"Имя"}
-                icon={"EditIcon"}
+                type={'text'}
+                placeholder={'Имя'}
+                icon={'EditIcon'}
                 value={values.name || ''}
-                name={"name"}
+                name={'name'}
                 error={false}
-                errorText={"Ошибка"}
-                size={"default"}
+                errorText={'Ошибка'}
+                size={'default'}
             />
             <EmailInput
                 onChange={onChange}
-                placeholder={"Логин"}
-                icon={"EditIcon"}
+                placeholder={'Логин'}
                 value={values.email || ''}
-                name={"email"}
+                name={'email'}
             />
             <PasswordInput
                 onChange={onChange}
-                icon={"EditIcon"}
+                icon={'EditIcon'}
                 value={values.password || ''}
-                name={"password"}
+                name={'password'}
             />
             {
                 isChanged && <div className={styles.buttons_container}>
-                    <Button onClick={onCancelChange} type="secondary" size="medium" htmlType='reset'>
+                    <Button onClick={onCancelChange} type='secondary' size='medium' htmlType='reset'>
                         Отмена
                     </Button>
-                    <Button type="primary" size="medium" htmlType='submit'>
+                    <Button type='primary' size='medium' htmlType='submit'>
                         Сохранить
                     </Button>
                 </div>

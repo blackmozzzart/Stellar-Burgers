@@ -1,9 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode, MouseEvent } from 'react';
 import styles from './modalOverlay.module.css';
 
-export const ModalOverlay = (props) => {
-    const handleClick = (event) => {
+interface ModalOverlayProps {
+    children: ReactNode;
+    onClick(): void;
+}
+
+export const ModalOverlay: React.FC<ModalOverlayProps> = (props) => {
+    const handleClick = (event: MouseEvent<HTMLDivElement>) => {
         if (event.target === event.currentTarget) {
             props.onClick()
         }
@@ -17,9 +21,4 @@ export const ModalOverlay = (props) => {
             {props.children}
         </div>
     )
-}
-
-ModalOverlay.propTypes = {
-    children: PropTypes.node.isRequired,
-    onClick: PropTypes.func.isRequired
 }

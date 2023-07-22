@@ -1,35 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import styles from './login.module.css';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useNavigate } from 'react-router-dom';
-import { LOGIN_FAILURE, loginThunk } from '../../services/actions/user';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../services/store';
+import { Link } from 'react-router-dom';
+import { loginThunk } from '../../services/actions/user';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import { ROUTE_FORGOT_PASSWORD, ROUTE_REGISTER } from '../../utils/constants';
 
 export const Login = () => {
     const [emailValue, setEmailValue] = useState('');
     const [passValue, setPassValue] = useState('');
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const isError = useAppSelector((store) => store.user.loginRequestFailed)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!emailValue || !passValue) {
             return;
         }
+
         dispatch(loginThunk(emailValue, passValue))
-            .then(() => {
-                navigate('/')
-            })
-            .catch(() => {
-                dispatch({
-                    type: LOGIN_FAILURE,
-                    payload: false
-                })
-            })
+
     }
 
     return (
