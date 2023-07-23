@@ -11,7 +11,7 @@ import { TIngredient } from '../../services/types/types';
 
 type TingredientsInConstructor = Record<string, number>
 
-const categoryMap: Record<string, string> = {
+const categoryMap = {
     bun: 'Булки',
     sauce: 'Соусы',
     main: 'Начинки',

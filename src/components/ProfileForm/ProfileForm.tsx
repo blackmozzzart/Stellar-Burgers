@@ -6,11 +6,13 @@ import { updateUserThunk } from '../../services/actions/user';
 import { useForm } from '../../hooks/useForm';
 import { TUser } from '../../services/types/types';
 
+type FormValues = { name: string, email: string, password: string }
+
 export const ProfileForm: React.FC = () => {
     const user = useAppSelector((store) => store.user) as TUser;
     const [isChanged, setIsChanged] = useState(false);
     const dispatch = useAppDispatch();
-    const { values, handleChange, setValues } = useForm({ name: user.name, email: user.email, password: user.password });
+    const { values, handleChange, setValues } = useForm<FormValues>({ name: user.name, email: user.email, password: user.password });
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         handleChange(e);

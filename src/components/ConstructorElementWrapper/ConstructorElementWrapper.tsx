@@ -5,9 +5,10 @@ import { useDrag, useDrop } from 'react-dnd'
 
 import { useAppDispatch } from '../../services/store';
 import { MOVE_INGREDIENT, REMOVE_INGREDIENT } from '../../services/actions/burgerConstructor';
+import { TIngredient } from '../../services/types/types';
 
 type ConstructorElementWrapperProps = {
-  ingredient: Record<string, any>;
+  ingredient: TIngredient;
   index: number;
 };
 
@@ -15,14 +16,14 @@ export const ConstructorElementWrapper = ({ ingredient, index }: ConstructorElem
   const dispatch = useAppDispatch()
 
   const ref = useRef<HTMLDivElement | null>(null)
-  const [, drop] = useDrop({
+  const [, drop] = useDrop<ConstructorElementWrapperProps>({
     accept: 'constructorElement',
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
       }
     },
-    hover(item: any, monitor) {
+    hover(item, monitor) {
       if (!ref.current) {
         return
       }

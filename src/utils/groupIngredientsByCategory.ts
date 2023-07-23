@@ -1,20 +1,23 @@
 import { TIngredient } from "../services/types/types";
 
-const categoryOrderMap: Record<string, number> = {
+const categoryOrderMap: Record<TIngredient['type'], number> = {
   bun: 1,
   sauce: 2,
   main: 3,
 }
 
-export const groupIngredientsByCategory = (ingredientsList: TIngredient[]): ([string, TIngredient[]])[] => {
-  const map = ingredientsList.reduce<Record<string, TIngredient[]>>((acc, item) => {
+type IngredientsMap = Record<TIngredient['type'], TIngredient[]>;
+type ReturnType = [TIngredient['type'], TIngredient[]][];
+
+export const groupIngredientsByCategory = (ingredientsList: TIngredient[]): ReturnType => {
+  const map = ingredientsList.reduce<IngredientsMap>((acc, item) => {
     const type = item.type;
     if (!acc[type]) {
       acc[type] = [];
     }
     acc[type].push(item)
     return acc;
-  }, {})
+  }, {} as IngredientsMap)
 
-  return Object.entries<TIngredient[]>(map).sort((a, b) => categoryOrderMap[a[0]] - categoryOrderMap[b[0]])
+  return (Object.entries(map) as ReturnType).sort((a, b) => categoryOrderMap[a[0]] - categoryOrderMap[b[0]])
 }

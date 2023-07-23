@@ -1,7 +1,7 @@
 export type TIngredient = {
     _id: string,
     name: string,
-    type: string,
+    type: 'bun' | 'sauce' | 'main',
     proteins: number,
     fat: number,
     carbohydrates: number,
@@ -14,7 +14,7 @@ export type TIngredient = {
 }
 
 export type TUser = {
-    name: string;
-    email: string;
-    password: string;
+    readonly name: string;
+    readonly email: string;
+    readonly password: string;
 }
