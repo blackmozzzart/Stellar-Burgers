@@ -3,7 +3,7 @@ import styles from './not-found.module.css';
 import { Link } from 'react-router-dom';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export const NotFound404 = () => {
+export const NotFound404: React.FC = () => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.container}>

@@ -1,8 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './ingredientDetails.module.css';
+import { TIngredient } from '../../services/types/types';
 
-export const IngredientDetails = ({ image, name, proteins, fat, carbohydrates, calories }) => {
+type TIngredientDetails = Omit<TIngredient, '_id' | 'image_mobile' | 'image_large' | 'type' | 'price'>
+
+export const IngredientDetails: React.FC<TIngredientDetails> = ({ image, name, proteins, fat, carbohydrates, calories }) => {
     return (
         <div className={styles.container}>
             <img src={image} className={`${styles.image} ml-4 mr-4`} alt='ingredient' />
@@ -23,13 +25,4 @@ export const IngredientDetails = ({ image, name, proteins, fat, carbohydrates, c
             </div>
         </div>
     )
-}
-
-IngredientDetails.propTypes = {
-    image: PropTypes.string,
-    name: PropTypes.string,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    calories: PropTypes.number,
 }

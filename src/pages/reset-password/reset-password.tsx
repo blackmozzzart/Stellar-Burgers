@@ -1,16 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, FormEvent } from 'react';
 import styles from './reset-password.module.css';
 import { Link } from 'react-router-dom';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { resetPasswordRequest } from '../../utils/api';
 import { ROUTE_LOGIN } from '../../utils/constants';
 
-export const ResetPassword = () => {
+export const ResetPassword: React.FC = () => {
     const [codeValue, setCodeValue] = useState('');
     const [passValue, setPassValue] = useState('');
     const inputRef = useRef(null);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!passValue || !codeValue) {
@@ -31,7 +31,6 @@ export const ResetPassword = () => {
                     onChange={(e) => { setPassValue(e.target.value) }}
                     value={passValue}
                     name={'password'}
-                    //@ts-ignore
                     placeholder={'Введите новый пароль'}
                 />
                 <div className='mb-6 mt-6'>

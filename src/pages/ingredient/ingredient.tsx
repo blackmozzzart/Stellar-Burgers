@@ -3,11 +3,12 @@ import styles from './ingredient.module.css';
 import { IngredientDetails } from '../../components/IngredientDetails';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../services/store';
+import { TIngredient } from '../../services/types/types';
 
-export const Ingredient = () => {
+export const Ingredient: React.FC = () => {
     const params = useParams();
     const ingredient = useAppSelector((store) => {
-        return store.ingredients.ingredients.find((ingredient) => ingredient._id === params.id)
+        return store.ingredients.ingredients.find((ingredient: TIngredient) => ingredient._id === params.id)
     });
 
     if (!ingredient) {

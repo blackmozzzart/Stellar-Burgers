@@ -1,9 +1,14 @@
-import React from "react";
-import PropTypes from 'prop-types';
+import React, { ReactNode } from "react";
 import { NavLink } from 'react-router-dom';
 import styles from './menuItem.module.css';
 
-export const MenuItem = ({ icon, text, href }) => {
+interface MenuItemProps {
+    icon: ReactNode;
+    text: string;
+    href: string;
+}
+
+export const MenuItem: React.FC<MenuItemProps> = ({ icon, text, href }) => {
     return (
         <NavLink to={href}>
             {(props) => (
@@ -16,10 +21,4 @@ export const MenuItem = ({ icon, text, href }) => {
             )}
         </NavLink>
     )
-}
-
-MenuItem.propTypes = {
-    icon: PropTypes.element,
-    text: PropTypes.string,
-    href: PropTypes.string
 }

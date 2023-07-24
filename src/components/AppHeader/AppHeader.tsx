@@ -3,7 +3,7 @@ import { MenuItem } from '../MenuItem';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './appHeader.module.css';
 
-export const AppHeader = () => {
+export const AppHeader: React.FC = () => {
 
     return (
         <header className={`${styles.header} p-4`}>
@@ -11,12 +11,12 @@ export const AppHeader = () => {
                 <nav className={styles.nav}>
                     <MenuItem
                         href={'/'}
-                        icon={<BurgerIcon />}
+                        icon={<BurgerIcon type='primary' />}
                         text={'Конструктор'}
                     />
                     <MenuItem
                         href={'/list'}
-                        icon={<ListIcon />}
+                        icon={<ListIcon type='primary' />}
                         text={'Лента заказов'}
                     />
                 </nav>
@@ -24,7 +24,7 @@ export const AppHeader = () => {
                 <nav className={`${styles.nav} ${styles.nav_right}`}>
                     <MenuItem
                         href={'/profile'}
-                        icon={<ProfileIcon />}
+                        icon={<ProfileIcon type='primary' />}
                         text={'Личный кабинет'}
                     />
                 </nav>

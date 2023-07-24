@@ -1,33 +1,30 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, FormEvent } from 'react';
 import styles from './register.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { registerThunk } from '../../services/actions/user';
-import { useDispatch } from 'react-redux';
 import { ROUTE_LOGIN } from '../../utils/constants';
+import { useAppDispatch } from '../../services/store';
 
-export const Register = () => {
+export const Register: React.FC = () => {
     const [nameValue, setNameValue] = useState('');
     const [emailValue, setEmailValue] = useState('');
     const [passValue, setPassValue] = useState('');
-    const inputRef = useRef();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const inputRef = useRef<HTMLInputElement>(null);
+    const dispatch = useAppDispatch();
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!nameValue || !emailValue || !passValue) {
             return;
         }
         dispatch(registerThunk(emailValue, nameValue, passValue))
-            .then(() => {
-                navigate('/')
-            });
     }
 
-    const passChange = (e) => {
-        setPassValue(e.target.value);
+    const passChange = (e: FormEvent<HTMLInputElement>) => {
+        setPassValue(e.currentTarget.value);
     }
 
 

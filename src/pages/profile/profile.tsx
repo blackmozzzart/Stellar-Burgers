@@ -1,14 +1,14 @@
 import React from 'react';
 import styles from './profile.module.css';
 import { NavLink, useResolvedPath } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { ProfileForm } from '../../components/ProfileForm';
 import { logoutThunk } from '../../services/actions/user';
 import { ROUTE_LOGIN } from '../../utils/constants';
+import { useAppDispatch } from '../../services/store';
 
-export const Profile = () => {
+export const Profile: React.FC = () => {
     const url = useResolvedPath('').pathname;
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     return (
         <div className={styles.wrapper}>

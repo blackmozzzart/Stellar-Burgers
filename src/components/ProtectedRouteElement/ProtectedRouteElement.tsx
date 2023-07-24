@@ -1,14 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAppSelector } from '../../services/store';
 
-export const ProtectedRouteElement = ({ element }) => {
+interface ProtectedRouteElementProps {
+    element: ReactElement;
+}
+
+export const ProtectedRouteElement: React.FC<ProtectedRouteElementProps> = ({ element }) => {
     const isLogged = useAppSelector((store) => store.user.isLoggedIn)
 
     return isLogged ? element : <Navigate to='/login' replace />
-}
-
-ProtectedRouteElement.propTypes = {
-    element: PropTypes.element,
 }
