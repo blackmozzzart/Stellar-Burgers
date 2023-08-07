@@ -8,10 +8,10 @@ import { OrderDetails } from '../OrderDetails';
 import { ConstructorElementWrapper } from '../ConstructorElementWrapper';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 
-import { fetchOrderThunk } from '../../services/actions/orderDetails';
-import { UPDATE_ORDER_NUMBER } from '../../services/actions/orderDetails';
+import { fetchOrderThunk } from '../../services/redux/actions/orderDetails';
+import { UPDATE_ORDER_NUMBER } from '../../services/redux/actions/orderDetails';
 import { useNavigate } from 'react-router-dom';
-import { TIngredient } from '../../services/types/types';
+import { TIngredient } from '../../services/redux/types/types';
 
 type TMapIngredients = Record<string, TIngredient>
 

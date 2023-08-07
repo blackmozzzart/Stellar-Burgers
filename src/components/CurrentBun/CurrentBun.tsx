@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './currentBun.module.css';
-import { TIngredient } from '../../services/types/types';
+import { TIngredient } from '../../services/redux/types/types';
 
 interface CurrentBunProps {
     children: ReactNode;

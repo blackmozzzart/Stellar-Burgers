@@ -7,7 +7,7 @@ import { InView } from 'react-intersection-observer';
 import { useAppSelector } from '../../services/store';
 import { groupIngredientsByCategory } from '../../utils/groupIngredientsByCategory';
 import { Link, useLocation } from 'react-router-dom';
-import { TIngredient } from '../../services/types/types';
+import { TIngredient } from '../../services/redux/types/types';
 
 type TingredientsInConstructor = Record<string, number>
 
@@ -17,7 +17,7 @@ const categoryMap = {
     main: 'Начинки',
 }
 
-export const BurgerIngredients = () => {
+export const BurgerIngredients: React.FC = () => {
     const location = useLocation();
     const [currentTab, setCurrentTab] = useState('bun')
     const ingredientsList = useAppSelector(store => store.ingredients.ingredients)

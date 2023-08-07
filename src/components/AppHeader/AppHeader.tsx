@@ -15,7 +15,7 @@ export const AppHeader: React.FC = () => {
                         text={'Конструктор'}
                     />
                     <MenuItem
-                        href={'/list'}
+                        href={'/feed'}
                         icon={<ListIcon type='primary' />}
                         text={'Лента заказов'}
                     />

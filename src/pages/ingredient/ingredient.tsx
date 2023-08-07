@@ -3,7 +3,7 @@ import styles from './ingredient.module.css';
 import { IngredientDetails } from '../../components/IngredientDetails';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../services/store';
-import { TIngredient } from '../../services/types/types';
+import { TIngredient } from '../../services/redux/types/types';
 
 export const Ingredient: React.FC = () => {
     const params = useParams();

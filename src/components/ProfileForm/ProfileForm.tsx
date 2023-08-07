@@ -2,9 +2,9 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profileForm.module.css';
 import { useAppDispatch, useAppSelector } from '../../services/store';
-import { updateUserThunk } from '../../services/actions/user';
+import { updateUserThunk } from '../../services/redux/actions/user';
 import { useForm } from '../../hooks/useForm';
-import { TUser } from '../../services/types/types';
+import { TUser } from '../../services/redux/types/types';
 
 type FormValues = { name: string, email: string, password: string }
 
