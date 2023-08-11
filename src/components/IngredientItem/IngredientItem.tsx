@@ -3,7 +3,7 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import styles from './ingredientItem.module.css';
 import { useDrag } from 'react-dnd'
 import { useAppDispatch } from '../../services/store';
-import { addIngredient, setBurgerBun } from '../../services/actions/burgerConstructor';
+import { addIngredient, setBurgerBun } from '../../services/redux/actions/burgerConstructor';
 
 interface IngredientItemProps {
     id: string;
@@ -30,7 +30,9 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({ id, image, type,
             const isBun = type === 'bun';
 
             if (item && dropResult) {
-                dispatch(isBun ? setBurgerBun(id) : addIngredient({ id }))
+                const fn = isBun ? setBurgerBun : addIngredient;
+
+                dispatch(fn(id));
             }
         },
     }))

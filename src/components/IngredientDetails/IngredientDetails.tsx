@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './ingredientDetails.module.css';
-import { TIngredient } from '../../services/types/types';
+import { TIngredient } from '../../services/redux/types/types';
 
 type TIngredientDetails = Omit<TIngredient, '_id' | 'image_mobile' | 'image_large' | 'type' | 'price'>
 

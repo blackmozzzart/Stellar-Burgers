@@ -2,7 +2,7 @@ import React, { useState, useRef, FormEvent } from 'react';
 import styles from './register.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
-import { registerThunk } from '../../services/actions/user';
+import { registerThunk } from '../../services/redux/actions/user';
 import { ROUTE_LOGIN } from '../../utils/constants';
 import { useAppDispatch } from '../../services/store';
 
@@ -20,7 +20,7 @@ export const Register: React.FC = () => {
         if (!nameValue || !emailValue || !passValue) {
             return;
         }
-        dispatch(registerThunk(emailValue, nameValue, passValue))
+        dispatch(registerThunk({ email: emailValue, name: nameValue, password: passValue }))
     }
 
     const passChange = (e: FormEvent<HTMLInputElement>) => {

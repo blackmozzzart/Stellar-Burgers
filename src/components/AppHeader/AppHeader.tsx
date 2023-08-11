@@ -15,12 +15,14 @@ export const AppHeader: React.FC = () => {
                         text={'Конструктор'}
                     />
                     <MenuItem
-                        href={'/list'}
+                        href={'/feed'}
                         icon={<ListIcon type='primary' />}
                         text={'Лента заказов'}
                     />
                 </nav>
-                <Logo />
+                <a href={'/'}>
+                    <Logo />
+                </a>
                 <nav className={`${styles.nav} ${styles.nav_right}`}>
                     <MenuItem
                         href={'/profile'}

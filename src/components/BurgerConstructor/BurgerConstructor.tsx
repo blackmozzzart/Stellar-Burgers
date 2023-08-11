@@ -8,10 +8,10 @@ import { OrderDetails } from '../OrderDetails';
 import { ConstructorElementWrapper } from '../ConstructorElementWrapper';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 
-import { fetchOrderThunk } from '../../services/actions/orderDetails';
-import { UPDATE_ORDER_NUMBER } from '../../services/actions/orderDetails';
+import { fetchOrderThunk } from '../../services/redux/actions/orderDetails';
+import { UPDATE_ORDER_NUMBER } from '../../services/redux/actions/orderDetails';
 import { useNavigate } from 'react-router-dom';
-import { TIngredient } from '../../services/types/types';
+import { TIngredient } from '../../services/redux/types/types';
 
 type TMapIngredients = Record<string, TIngredient>
 
@@ -49,7 +49,7 @@ export const BurgerConstructor: React.FC = () => {
         }),
     }))
 
-    const selectedBun = allIgredients[selectedBunId];
+    const selectedBun = allIgredients[selectedBunId || ''];
     const ingredientsList = selectedIgredientsIds.map((ingredient) => {
         const ingredientData = allIgredients[ingredient.id];
         return {
@@ -105,7 +105,7 @@ export const BurgerConstructor: React.FC = () => {
                     {isOrderLoading ? 'Идет загрузка' : 'Оформить заказ'}
                 </Button>
             </div>
-            {Boolean(orderNumber) && (
+            {!!(orderNumber) && (
                 <Modal
                     onClose={() => {
                         dispatch({ type: UPDATE_ORDER_NUMBER, payload: null })

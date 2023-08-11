@@ -1,11 +1,10 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import styles from './constructorElementWrapper.module.css'
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag, useDrop } from 'react-dnd'
-
 import { useAppDispatch } from '../../services/store';
-import { MOVE_INGREDIENT, REMOVE_INGREDIENT } from '../../services/actions/burgerConstructor';
-import { TIngredient } from '../../services/types/types';
+import { TIngredient } from '../../services/redux/types/types';
+import { MOVE_INGREDIENT, REMOVE_INGREDIENT } from '../../services/redux/actions/burgerConstructor';
 
 type ConstructorElementWrapperProps = {
   ingredient: TIngredient;

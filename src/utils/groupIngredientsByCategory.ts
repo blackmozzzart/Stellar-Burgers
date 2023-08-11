@@ -1,4 +1,4 @@
-import { TIngredient } from "../services/types/types";
+import { TIngredient } from "../services/redux/types/types";
 
 const categoryOrderMap: Record<TIngredient['type'], number> = {
   bun: 1,

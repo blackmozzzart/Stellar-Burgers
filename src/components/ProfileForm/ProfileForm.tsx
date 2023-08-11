@@ -2,14 +2,13 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './profileForm.module.css';
 import { useAppDispatch, useAppSelector } from '../../services/store';
-import { updateUserThunk } from '../../services/actions/user';
+import { updateUserThunk } from '../../services/redux/actions/user';
 import { useForm } from '../../hooks/useForm';
-import { TUser } from '../../services/types/types';
 
 type FormValues = { name: string, email: string, password: string }
 
 export const ProfileForm: React.FC = () => {
-    const user = useAppSelector((store) => store.user) as TUser;
+    const user = useAppSelector((store) => store.user);
     const [isChanged, setIsChanged] = useState(false);
     const dispatch = useAppDispatch();
     const { values, handleChange, setValues } = useForm<FormValues>({ name: user.name, email: user.email, password: user.password });

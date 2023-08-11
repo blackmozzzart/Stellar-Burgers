@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -8,7 +8,7 @@ import { AppHeader } from '../AppHeader';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { BurgerConstructor } from '../BurgerConstructor';
 import { BurgerIngredients } from '../BurgerIngredients/BurgerIngredients';
-import { fetchIngredientsThunk } from '../../services/actions/ingredients';
+import { fetchIngredientsThunk } from '../../services/redux/actions/burgerIngredients';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { Login } from '../../pages/login/login';
 import { Register } from '../../pages/register/register';
@@ -20,8 +20,16 @@ import { ProtectedRouteElement } from '../ProtectedRouteElement/ProtectedRouteEl
 import { PublicRouteElement } from '../PublicRouteElement/PublicRouteElement';
 import { Ingredient } from '../../pages/ingredient/ingredient';
 import { IngredientDetailsModal } from '../IngredientDetailsModal';
-import { checkUserThunk } from '../../services/actions/user';
-import { ROUTE_FORGOT_PASSWORD, ROUTE_INGREDIENTS_ID, ROUTE_LOGIN, ROUTE_NOT_FOUND, ROUTE_PROFILE, ROUTE_REGISTER, ROUTE_RESET_PASSWORD } from '../../utils/constants';
+import { checkUserThunk } from '../../services/redux/actions/user';
+import { ROUTE_FEED, ROUTE_FORGOT_PASSWORD, ROUTE_INGREDIENTS_ID, ROUTE_LOGIN, ROUTE_NOT_FOUND, ROUTE_PROFILE, ROUTE_REGISTER, ROUTE_RESET_PASSWORD } from '../../utils/constants';
+import { Feed } from '../../pages/feed/feed';
+import { Orders } from '../../pages/orders/orders';
+import { ProfileForm } from '../ProfileForm';
+import { OrdersModal } from '../../pages/orders/ordersModal';
+import { FeedModal } from '../../pages/feed/feedModal';
+import { FeedInnerPage } from '../../pages/feed/feedInnerPage';
+import { FeedWrapper } from '../../pages/feed/feedWrapper';
+import { UserOrdersInnerPage } from '../../pages/orders/userOrdersInnerPage';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -58,7 +66,24 @@ function App() {
           <Route path={ROUTE_REGISTER} element={<PublicRouteElement element={<Register />} />} />
           <Route path={ROUTE_FORGOT_PASSWORD} element={<PublicRouteElement element={<ForgotPassword />} />} />
           <Route path={ROUTE_RESET_PASSWORD} element={<ResetPassword />} />
-          <Route path={ROUTE_PROFILE} element={<ProtectedRouteElement element={<Profile />} />} />
+          <Route path={ROUTE_PROFILE} element={<ProtectedRouteElement element={<Profile />} />}>
+            <Route
+              path=""
+              element={<ProfileForm />}
+            />
+            <Route
+              path="orders"
+              element={<Orders />}
+            />
+            <Route
+              path="orders/:id"
+              element={<UserOrdersInnerPage />}
+            />
+          </Route>
+          <Route path={ROUTE_FEED} element={<FeedWrapper />}>
+            <Route path="" element={<Feed />} />
+            <Route path=':id' element={<FeedInnerPage />} />
+          </Route>
           <Route path={ROUTE_INGREDIENTS_ID} element={<Ingredient />} />
           <Route path={ROUTE_NOT_FOUND} element={<NotFound404 />} />
         </Routes>
@@ -67,6 +92,15 @@ function App() {
       {Boolean(state?.backgroundLocation) && (
         <Routes>
           <Route path={ROUTE_INGREDIENTS_ID} element={<IngredientDetailsModal />} />
+          <Route path={ROUTE_PROFILE}>
+            <Route
+              path="orders/:id"
+              element={<OrdersModal />}
+            />
+          </Route>
+          <Route path={ROUTE_FEED}>
+            <Route path=':id' element={<FeedModal />} />
+          </Route>
         </Routes>
       )}
     </div >

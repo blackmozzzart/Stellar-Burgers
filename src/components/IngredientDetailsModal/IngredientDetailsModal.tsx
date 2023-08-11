@@ -3,7 +3,7 @@ import { useAppSelector } from "../../services/store"
 import { useNavigate, useParams } from "react-router-dom";
 import { Modal } from "../Modal";
 import { IngredientDetails } from "../IngredientDetails/IngredientDetails";
-import { TIngredient } from '../../services/types/types';
+import { TIngredient } from '../../services/redux/types/types';
 
 export const IngredientDetailsModal: React.FC = () => {
     const navigate = useNavigate();
