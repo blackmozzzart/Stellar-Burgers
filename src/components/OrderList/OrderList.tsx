@@ -2,10 +2,10 @@ import React from 'react';
 import styles from './orderList.module.css';
 import { Loader } from '../Loader';
 import { OrderComponent } from '../OrderComponent/OrderComponent';
-import { TOrder, TWSOrders } from '../../services/redux/types/types';
+import { TOrders } from '../../services/redux/types/types';
 
 type Props = {
-    orders: readonly TWSOrders[];
+    orders: TOrders[];
     connected: boolean;
 }
 
@@ -22,7 +22,7 @@ export const OrderList: React.FC<Props> = ({ orders, connected }) => {
                 {
                     orders?.length > 0 ? (
                         <ul className={`${styles.list} pt-6 pb-10 pr-4 pl-4`}>
-                            {orders?.map((order: TOrder, idx: number) => (
+                            {orders?.map((order, idx) => (
                                 <OrderComponent key={idx} isHistory={false} order={order} />
                             ))}
                         </ul>

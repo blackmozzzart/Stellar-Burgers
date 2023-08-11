@@ -4,7 +4,7 @@ import { OrderList } from '../../components/OrderList';
 import { OrderInfo } from '../../components/OrderInfo';
 import { useAppSelector } from '../../services/store';
 
-export const Feed: React.FC = () => {
+export const Feed: React.FC = React.memo(() => {
     const orders = useAppSelector((state) => state.feedOrders.orders);
     const connected = useAppSelector((state) => state.feedOrders.wsConnected);
 
@@ -17,4 +17,4 @@ export const Feed: React.FC = () => {
             </div>
         </div>
     )
-}
+})

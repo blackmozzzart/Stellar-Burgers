@@ -49,7 +49,7 @@ export const BurgerConstructor: React.FC = () => {
         }),
     }))
 
-    const selectedBun = allIgredients[selectedBunId];
+    const selectedBun = allIgredients[selectedBunId || ''];
     const ingredientsList = selectedIgredientsIds.map((ingredient) => {
         const ingredientData = allIgredients[ingredient.id];
         return {
@@ -105,7 +105,7 @@ export const BurgerConstructor: React.FC = () => {
                     {isOrderLoading ? 'Идет загрузка' : 'Оформить заказ'}
                 </Button>
             </div>
-            {Boolean(orderNumber) && (
+            {!!(orderNumber) && (
                 <Modal
                     onClose={() => {
                         dispatch({ type: UPDATE_ORDER_NUMBER, payload: null })

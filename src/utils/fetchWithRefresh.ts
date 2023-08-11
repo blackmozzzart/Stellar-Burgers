@@ -1,14 +1,14 @@
 import { refreshToken } from "./api";
 import { checkResponse } from "./checkResponse";
+import { getAccessToken, getRefreshToken } from "./tokenHelpet";
 
 export const fetchWithRefresh = async (url: string, options: RequestInit = {}) => {
     try {
-        const accessToken = sessionStorage.getItem('accessToken');
+        const accessToken = getAccessToken();
 
         if (!accessToken) {
             throw new Error();
         }
-
 
         const res = await fetch(url, {
             ...options,
@@ -20,7 +20,7 @@ export const fetchWithRefresh = async (url: string, options: RequestInit = {}) =
         return await checkResponse(res);
     } catch (err: any) {
         if (err.message === "jwt expired") {
-            const refreshData = await refreshToken(localStorage.getItem('refreshToken')); //обновляем токен
+            const refreshData = await refreshToken(getRefreshToken()); //обновляем токен
             localStorage.setItem("refreshToken", refreshData.refreshToken);
             localStorage.setItem("accessToken", refreshData.accessToken); //(или в cookies)
 

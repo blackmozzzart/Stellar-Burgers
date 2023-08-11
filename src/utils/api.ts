@@ -1,6 +1,6 @@
 import { TToken, TUser } from '../services/redux/types/types';
 import { checkResponse } from './checkResponse';
-import { ALL_ORDERS_URL, BASE_URL, WS_URL } from './constants';
+import { BASE_URL, WS_URL } from './constants';
 import { fetchWithRefresh } from './fetchWithRefresh';
 
 export const loginRequest = async (email: string, password: string) => {

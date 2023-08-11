@@ -1,30 +1,29 @@
-import { AnyAction } from 'redux';
+import { TOrders } from '../types/types';
 import {
     WS_ORDERS_DISCONNECTING,
     WS_ORDERS_CONNECTION_SUCCESS,
     WS_ORDERS_CONNECTION_ERROR,
     WS_ORDERS_CONNECTION_CLOSED,
     WS_ORDERS_GET_MESSAGE,
+    OrdersWsActions,
 } from '../actions/ordersFeed';
 
-import { TWSOrders } from "../types/types";
-
-type WSState = {
+interface IOrdersFeedInitialState {
     wsConnected: boolean;
-    orders: ReadonlyArray<TWSOrders>;
+    orders: TOrders[];
     total: number;
     totalToday: number;
     error?: Event;
 };
 
-const initialState: WSState = {
+const initialState: IOrdersFeedInitialState = {
     wsConnected: false,
     orders: [],
     total: 0,
     totalToday: 0,
 };
 
-export const ordersFeedReducer = (state = initialState, action: AnyAction): WSState => {
+export const ordersFeedReducer = (state = initialState, action: OrdersWsActions): IOrdersFeedInitialState => {
     switch (action.type) {
         case WS_ORDERS_CONNECTION_SUCCESS: {
             return {

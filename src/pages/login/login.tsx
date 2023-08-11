@@ -6,7 +6,7 @@ import { loginThunk } from '../../services/redux/actions/user';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { ROUTE_FORGOT_PASSWORD, ROUTE_REGISTER } from '../../utils/constants';
 
-export const Login = () => {
+export const Login: React.FC = () => {
     const [emailValue, setEmailValue] = useState('');
     const [passValue, setPassValue] = useState('');
     const dispatch = useAppDispatch();

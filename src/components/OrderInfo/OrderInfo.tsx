@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './orderInfo.module.css';
 import { Loader } from '../Loader';
-import { TOrder } from '../../services/redux/types/types';
 import { useAppSelector } from '../../services/store';
 
 export const OrderInfo: React.FC = () => {
@@ -17,7 +16,7 @@ export const OrderInfo: React.FC = () => {
                         <>
                             <div className={styles.order_numbers}>
                                 {
-                                    orders?.some((order: TOrder) => order.status === 'done') && (
+                                    orders?.some((order) => order.status === 'done') && (
                                         <div className={styles.ready}>
                                             <p className="text text_type_main-medium pb-6">
                                                 Готовы:
@@ -25,7 +24,7 @@ export const OrderInfo: React.FC = () => {
                                             <div className={styles.numbers_container}>
                                                 <ul className={styles.list_accent}>
                                                     {
-                                                        orders?.map((order: TOrder, idx: number) => {
+                                                        orders?.map((order, idx) => {
                                                             if (idx < 10 && order.status === 'done') {
                                                                 return (<li key={idx} className="text text_type_digits-default pb-2">
                                                                     {order.number}
@@ -37,7 +36,7 @@ export const OrderInfo: React.FC = () => {
                                                 </ul>
                                                 <ul className={styles.list_accent}>
                                                     {
-                                                        orders?.map((order: TOrder, idx: number) => {
+                                                        orders?.map((order, idx) => {
                                                             if (idx >= 10 && idx < 20 && order.status === 'done') {
                                                                 return (<li key={idx} className="text text_type_digits-default pb-2">
                                                                     {order.number}
@@ -52,14 +51,14 @@ export const OrderInfo: React.FC = () => {
                                     )
                                 }
                                 {
-                                    orders?.some((order: TOrder) => order.status === 'pending') && (
+                                    orders?.some((order) => order.status === 'pending') && (
                                         <div className={styles.atWork}>
                                             <p className="text text_type_main-medium pb-6">
                                                 В работе:
                                             </p>
                                             <ul className={styles.list}>
                                                 {
-                                                    orders?.map((order: TOrder, idx: number) => {
+                                                    orders?.map((order, idx) => {
                                                         if (idx < 10 && order.status === 'pending') {
                                                             return (<li key={idx} className="text text_type_digits-default pb-2">
                                                                 {order.number}

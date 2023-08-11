@@ -1,20 +1,19 @@
-import { AnyAction } from "redux";
 import { TIngredient } from "../types/types";
-import { FETCH_INGREDIENTS_REQUEST, FETCH_INGREDIENTS_SUCCESS, FETCH_INGREDIENTS_FAILURE } from "../actions/burgerIngredients";
+import { FETCH_INGREDIENTS_REQUEST, FETCH_INGREDIENTS_SUCCESS, FETCH_INGREDIENTS_FAILURE, TFetchIngredientsActionTypes } from "../actions/burgerIngredients";
 
-interface IInitialState {
+interface IIngredientsInitialState {
     ingredients: TIngredient[];
     loading: boolean;
     error: null | string;
 }
 
-const initialState: IInitialState = {
+const initialState: IIngredientsInitialState = {
     ingredients: [],
     loading: false,
     error: null,
 };
 
-export const ingredientsReducer = (state = initialState, action: AnyAction) => {
+export const ingredientsReducer = (state = initialState, action: TFetchIngredientsActionTypes): IIngredientsInitialState => {
     switch (action.type) {
         case FETCH_INGREDIENTS_REQUEST:
             return {

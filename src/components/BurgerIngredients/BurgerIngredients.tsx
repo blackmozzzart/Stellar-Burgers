@@ -7,7 +7,6 @@ import { InView } from 'react-intersection-observer';
 import { useAppSelector } from '../../services/store';
 import { groupIngredientsByCategory } from '../../utils/groupIngredientsByCategory';
 import { Link, useLocation } from 'react-router-dom';
-import { TIngredient } from '../../services/redux/types/types';
 
 type TingredientsInConstructor = Record<string, number>
 
@@ -23,7 +22,7 @@ export const BurgerIngredients: React.FC = () => {
     const ingredientsList = useAppSelector(store => store.ingredients.ingredients)
     const selectedBunId = useAppSelector(store => store.burgerConstructor.bun)
 
-    const ingredientsInConstructor = useAppSelector((store) => store.burgerConstructor.ingredients.reduce((acc: TingredientsInConstructor, item: TIngredient) => {
+    const ingredientsInConstructor = useAppSelector((store) => store.burgerConstructor.ingredients.reduce((acc: TingredientsInConstructor, item) => {
         if (!acc[item.id]) {
             acc[item.id] = 0;
         }

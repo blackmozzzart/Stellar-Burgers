@@ -1,5 +1,5 @@
 import { ORDERS_URL } from "../../../utils/constants";
-import { request } from "../../../utils/request";
+import { fetchWithRefresh } from "../../../utils/fetchWithRefresh";
 import { AppThunkAction } from "../../store";
 import { clearBurgerConstructor } from "./burgerConstructor";
 
@@ -8,53 +8,58 @@ export const FETCH_ORDER_SUCCESS = 'FETCH_ORDER_SUCCESS';
 export const FETCH_ORDER_FAILURE = 'FETCH_ORDER_FAILURE';
 export const UPDATE_ORDER_NUMBER = 'UPDATE_ORDER_NUMBER';
 
-type TFetchOrderRequest = {
+interface IFetchOrderRequestAction {
     type: typeof FETCH_ORDER_REQUEST;
 }
-type TFetchOrderSuccess = {
+
+interface IFetchOrderSuccessAction {
     type: typeof FETCH_ORDER_SUCCESS;
-    order: string;
+    payload: number;
 }
-type TFetchOrderFailure = {
+
+interface IFetchOrderFailureAction {
     type: typeof FETCH_ORDER_FAILURE;
-    error: string;
+    payload: string;
 }
-type TUpdateOrderNumber = {
+
+interface IUpdateOrderNumberAction {
     type: typeof UPDATE_ORDER_NUMBER;
+    payload: number;
 }
 
-export type OrderDetailsActions =
-    | TFetchOrderRequest
-    | TFetchOrderSuccess
-    | TFetchOrderFailure
-    | TUpdateOrderNumber
+export type TOrderActionTypes =
+    | IFetchOrderRequestAction
+    | IFetchOrderSuccessAction
+    | IFetchOrderFailureAction
+    | IUpdateOrderNumberAction;
 
-export const fetchOrderRequest = () => ({
+export const fetchOrderRequest = (): IFetchOrderRequestAction => ({
     type: FETCH_ORDER_REQUEST,
 });
 
-export const fetchOrderSuccess = (order: string) => ({
+export const fetchOrderSuccess = (order: number): IFetchOrderSuccessAction => ({
     type: FETCH_ORDER_SUCCESS,
     payload: order,
 });
 
-export const fetchOrderFailure = (error: string) => ({
+export const fetchOrderFailure = (error: string): IFetchOrderFailureAction => ({
     type: FETCH_ORDER_FAILURE,
     payload: error,
 });
 
-export const updateOrderNumber = (orderNumber: number) => ({
+export const updateOrderNumber = (orderNumber: number): IUpdateOrderNumberAction => ({
     type: UPDATE_ORDER_NUMBER,
     payload: orderNumber,
 });
 
+// Thunk для получения заказа
 export const fetchOrderThunk = (): AppThunkAction<Promise<void>> => (dispatch, getState) => {
     dispatch({ type: FETCH_ORDER_REQUEST })
 
     const store = getState();
     const body = [store.burgerConstructor.bun, store.burgerConstructor.bun, ...store.burgerConstructor.ingredients.map(({ id }) => id)]
 
-    return request(ORDERS_URL, {
+    return fetchWithRefresh(ORDERS_URL, {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ingredients: body })

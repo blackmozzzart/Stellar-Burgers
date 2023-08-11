@@ -7,34 +7,41 @@ export const REMOVE_INGREDIENT = 'REMOVE_INGREDIENT';
 export const SET_BURGER_BUN = 'SET_BURGER_BUN';
 export const CLEAR_BURGER_CONSTRUCTOR = 'CLEAR_BURGER_CONSTRUCTOR';
 
-type TAddIngredient = {
-  readonly type: typeof ADD_INGREDIENT;
-  ingredient: TIngredient;
-}
-type TRemoveIngredient = {
-  readonly type: typeof REMOVE_INGREDIENT;
-  ingredient: TIngredient;
-}
-type TMoveIngredient = {
-  readonly type: typeof MOVE_INGREDIENT;
-  ingredient: TIngredient;
-}
-type TSetBurgerBun = {
-  readonly type: typeof SET_BURGER_BUN;
-  ingredient: string;
-}
-type TClearBurgerConstructor = {
-  readonly type: typeof CLEAR_BURGER_CONSTRUCTOR;
+interface IAddIngredientAction {
+  type: typeof ADD_INGREDIENT;
+  payload: {
+    id: string;
+    uniqId: string;
+  };
 }
 
-export type BurgerConstructorActions =
-  | TAddIngredient
-  | TRemoveIngredient
-  | TMoveIngredient
-  | TSetBurgerBun
-  | TClearBurgerConstructor
+interface IRemoveIngredientAction {
+  type: typeof REMOVE_INGREDIENT;
+  payload: number;
+}
 
-export const addIngredient = (ingredientId: string) => ({
+interface IMoveIngredientAction {
+  type: typeof MOVE_INGREDIENT;
+  payload: TIngredient;
+}
+
+interface ISetBurgerBunAction {
+  type: typeof SET_BURGER_BUN;
+  payload: string;
+}
+
+interface IClearBurgerConstructorAction {
+  type: typeof CLEAR_BURGER_CONSTRUCTOR;
+}
+
+export type TBurgerConstructorActionTypes =
+  | IAddIngredientAction
+  | IRemoveIngredientAction
+  | IMoveIngredientAction
+  | ISetBurgerBunAction
+  | IClearBurgerConstructorAction;
+
+export const addIngredient = (ingredientId: string): IAddIngredientAction => ({
   type: ADD_INGREDIENT,
   payload: {
     id: ingredientId,
@@ -42,21 +49,21 @@ export const addIngredient = (ingredientId: string) => ({
   }
 });
 
-export const removeIngredient = (ingredient: TIngredient) => ({
+export const removeIngredient = (ingredientIndex: number): IRemoveIngredientAction => ({
   type: REMOVE_INGREDIENT,
-  payload: ingredient
+  payload: ingredientIndex
 });
 
-export const moveIngredient = (ingredient: TIngredient) => ({
+export const moveIngredient = (ingredient: TIngredient): IMoveIngredientAction => ({
   type: MOVE_INGREDIENT,
   payload: ingredient
 })
 
-export const setBurgerBun = (ingredient: string) => ({
+export const setBurgerBun = (ingredient: string): ISetBurgerBunAction => ({
   type: SET_BURGER_BUN,
   payload: ingredient
 });
 
-export const clearBurgerConstructor = () => ({
+export const clearBurgerConstructor = (): IClearBurgerConstructorAction => ({
   type: CLEAR_BURGER_CONSTRUCTOR
 });

@@ -3,10 +3,10 @@ import styles from './orderComponent.module.css';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../../services/store';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { TIngredient, TOrder } from '../../services/redux/types/types';
+import { TIngredient, TOrders } from '../../services/redux/types/types';
 
 interface IOrderComponentProps {
-    order: TOrder,
+    order: TOrders,
     isHistory: boolean;
 }
 

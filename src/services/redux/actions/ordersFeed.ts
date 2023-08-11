@@ -8,38 +8,58 @@ export const WS_ORDERS_CONNECTION_ERROR = 'WS_ORDERS_CONNECTION_ERROR';
 export const WS_ORDERS_CONNECTION_CLOSED = 'WS_ORDERS_CONNECTION_CLOSED';
 export const WS_ORDERS_GET_MESSAGE = 'WS_ORDERS_GET_MESSAGE';
 
+type TWSConnectionStart = {
+    readonly type: typeof WS_ORDERS_CONNECTION_START;
+    readonly url: string;
+}
+type TWSConnectionSuccess = {
+    readonly type: typeof WS_ORDERS_CONNECTION_SUCCESS;
+    readonly payload: Event;
+}
 
-export const wsConnectionStart = (url: string) => {
-    return {
-        type: WS_ORDERS_CONNECTION_START,
-        url,
-    };
-};
+type TWSConnectionErrorAction = {
+    readonly type: typeof WS_ORDERS_CONNECTION_ERROR;
+    readonly payload: Event;
+}
 
-export const wsConnectionSuccess = (event: Event) => {
-    return { type: WS_ORDERS_CONNECTION_SUCCESS, payload: event };
-};
+type TWSConnectionClosed = {
+    readonly type: typeof WS_ORDERS_CONNECTION_CLOSED;
+}
 
-export const wsConnectionError = (event: Event) => {
-    return { type: WS_ORDERS_CONNECTION_ERROR, payload: event };
-};
+type TWSGetMessageAction = {
+    readonly type: typeof WS_ORDERS_GET_MESSAGE;
+    readonly data: Readonly<TWSGetMessage>
+}
+type TWSDisconnecting = {
+    readonly type: typeof WS_ORDERS_DISCONNECTING;
+}
 
-export const wsConnectionClosed = () => {
-    return { type: WS_ORDERS_CONNECTION_CLOSED };
-};
+export const wsConnectionStart = (url: string): TWSConnectionStart => ({
+    type: WS_ORDERS_CONNECTION_START,
+    url,
+});
 
-export const wsGetMessage = (data: Readonly<TWSGetMessage>) => {
-    return { type: WS_ORDERS_GET_MESSAGE, data };
-};
+export const wsConnectionSuccess = (event: Event): TWSConnectionSuccess => ({
+    type: WS_ORDERS_CONNECTION_SUCCESS,
+    payload: event
+});
 
-export const wsDisconnecting = () => {
-    return { type: WS_ORDERS_DISCONNECTING };
-};
+export const wsConnectionError = (event: Event): TWSConnectionErrorAction => ({ type: WS_ORDERS_CONNECTION_ERROR, payload: event })
+
+export const wsConnectionClosed = (): TWSConnectionClosed => ({
+    type: WS_ORDERS_CONNECTION_CLOSED
+});
+
+export const wsGetMessage = (data: Readonly<TWSGetMessage>): TWSGetMessageAction => ({ type: WS_ORDERS_GET_MESSAGE, data });
+
+export const wsDisconnecting = (): TWSDisconnecting => ({
+    type: WS_ORDERS_DISCONNECTING
+});
 
 export type OrdersWsActions =
-    | ReturnType<typeof wsConnectionStart>
-    | ReturnType<typeof wsConnectionSuccess>
-    | ReturnType<typeof wsConnectionError>
-    | ReturnType<typeof wsConnectionClosed>
-    | ReturnType<typeof wsGetMessage>
-    | ReturnType<typeof wsDisconnecting>;
+    | TWSConnectionStart
+    | TWSConnectionSuccess
+    | TWSConnectionErrorAction
+    | TWSConnectionClosed
+    | TWSGetMessageAction
+    | TWSDisconnecting

@@ -1,13 +1,18 @@
-import { AnyAction } from "redux";
-import { FETCH_ORDER_FAILURE, FETCH_ORDER_REQUEST, FETCH_ORDER_SUCCESS, UPDATE_ORDER_NUMBER } from "../actions/orderDetails";
+import { FETCH_ORDER_FAILURE, FETCH_ORDER_REQUEST, FETCH_ORDER_SUCCESS, TOrderActionTypes, UPDATE_ORDER_NUMBER } from "../actions/orderDetails";
 
-const initialState = {
+type IOrderDetailsInitialState = {
+    order: number | null;
+    loading: boolean;
+    error: string | null;
+}
+
+const initialState: IOrderDetailsInitialState = {
     order: null,
     loading: false,
     error: null,
 };
 
-export const orderDetailsReducer = (state = initialState, action: AnyAction) => {
+export const orderDetailsReducer = (state = initialState, action: TOrderActionTypes): IOrderDetailsInitialState => {
     switch (action.type) {
         case FETCH_ORDER_REQUEST:
             return {

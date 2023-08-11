@@ -1,10 +1,43 @@
-import { AnyAction } from "redux";
-import { FORGOT_PASSWORD_FAILURE, FORGOT_PASSWORD_SUCCESS, GET_USER_FAILURE, GET_USER_SUCCESS, LOGIN_FAILURE, LOGIN_SUCCESS, LOGOUT_FAILURE, LOGOUT_SUCCESS, REFRESH_TOKEN_FAILURE, REFRESH_TOKEN_SUCCESS, REGISTRATION_FAILURE, REGISTRATION_SUCCESS, REMOVE_USER, RESET_PASSWORD_FAILURE, RESET_PASSWORD_SUCCESS, SET_USER, UPDATE_USER, UPDATE_USER_FAILURE, UPDATE_USER_SUCCESS } from "../actions/user";
+import { getAccessToken, getRefreshToken, parseToken } from "../../../utils/tokenHelpet";
+import { FORGOT_PASSWORD_FAILURE, FORGOT_PASSWORD_SUCCESS, GET_USER_FAILURE, GET_USER_SUCCESS, LOGIN_FAILURE, LOGIN_SUCCESS, LOGOUT_FAILURE, LOGOUT_SUCCESS, REFRESH_TOKEN_FAILURE, REFRESH_TOKEN_SUCCESS, REGISTRATION_FAILURE, REGISTRATION_SUCCESS, REMOVE_USER, RESET_PASSWORD_FAILURE, RESET_PASSWORD_SUCCESS, SET_USER, TUserActionTypes, UPDATE_USER, UPDATE_USER_FAILURE, UPDATE_USER_SUCCESS } from "../actions/user";
 
-const initialState = {
+interface IUserInitialState {
+    isLoggedIn: boolean,
+    email: string,
+    name: string,
+    password: string,
+
+    getUserRequest: boolean,
+    changeUserRequest: boolean,
+    updateUserRequest: boolean,
+
+    registrationRequest: boolean,
+    registrationRequestFailed: boolean,
+
+    loginRequest: boolean,
+    loginRequestFailed: boolean,
+
+    resetPasswordRequest: boolean,
+    resetPasswordRequestFailed: boolean,
+
+    forgotPasswordRequest: boolean,
+    forgotPasswordRequestFailed: boolean,
+
+    logoutRequest: boolean,
+    logoutRequestFailed: boolean,
+
+    refreshTokenRequest: boolean,
+    refreshTokenRequestFailed: boolean,
+
+    accessToken: null | string,
+    refreshToken: null | string,
+}
+
+const initialState: IUserInitialState = {
     isLoggedIn: false,
     email: '',
     name: '',
+    password: '',
 
     getUserRequest: false,
     changeUserRequest: false,
@@ -32,22 +65,37 @@ const initialState = {
     refreshToken: null,
 }
 
-function getInitialState() {
-    const initialUser = sessionStorage.getItem('user');
+function getInitialState(): IUserInitialState {
+    const initialUser = localStorage.getItem('user');
+    const token = getAccessToken();
+    const refreshToken = getRefreshToken();
 
-    if (initialUser) {
+    console.log('inital')
+    if (initialUser && token && refreshToken) {
         const user = JSON.parse(initialUser);
+        const parsedToken = parseToken(token);
+
+        // Переводим формат времени ISO в локальный для юзера
+        if (parsedToken?.exp && Date.now() > parsedToken.exp * 1000) {
+            localStorage.removeItem('user');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            return initialState;
+        }
+
         return {
+            ...initialState,
+            ...user,
             isLoggedIn: true,
-            email: user.email,
-            name: user.name,
+            accessToken: token,
+            refreshToken
         }
     } else {
         return initialState;
     }
 }
 
-export const userReducer = (state = initialState, action: AnyAction) => {
+export const userReducer = (state = initialState, action: TUserActionTypes): IUserInitialState => {
     switch (action.type) {
         case REGISTRATION_SUCCESS: {
             return {
@@ -134,9 +182,12 @@ export const userReducer = (state = initialState, action: AnyAction) => {
             }
         }
         case SET_USER: {
+            const payload = action.payload || {}
+
             return {
+                ...state,
                 isLoggedIn: true,
-                ...action.payload
+                ...payload,
             };
         }
         case REMOVE_USER: {
@@ -155,9 +206,11 @@ export const userReducer = (state = initialState, action: AnyAction) => {
             }
         }
         case UPDATE_USER: {
+            const payload = action.payload || {}
+
             return {
                 ...state,
-                ...action.payload,
+                ...payload,
             }
         }
         case UPDATE_USER_SUCCESS: {
@@ -173,6 +226,7 @@ export const userReducer = (state = initialState, action: AnyAction) => {
             }
         }
         default: {
+            console.log(getInitialState())
             return getInitialState();
         }
     }
