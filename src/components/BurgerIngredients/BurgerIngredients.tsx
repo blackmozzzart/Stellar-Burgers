@@ -65,6 +65,7 @@ export const BurgerIngredients: React.FC = () => {
 
                                     return (
                                         <Link
+                                            data-test={"ingredient"}
                                             key={ingredient._id}
                                             className={styles.link}
                                             to={`/ingredients/${ingredient._id}`}

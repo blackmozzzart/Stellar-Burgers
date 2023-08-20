@@ -4,7 +4,7 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import { useDrag, useDrop } from 'react-dnd'
 import { useAppDispatch } from '../../services/store';
 import { TIngredient } from '../../services/redux/types/types';
-import { MOVE_INGREDIENT, REMOVE_INGREDIENT } from '../../services/redux/actions/burgerConstructor';
+import { REMOVE_INGREDIENT, moveIngredient } from '../../services/redux/actions/burgerConstructor';
 
 type ConstructorElementWrapperProps = {
   ingredient: TIngredient;
@@ -45,12 +45,7 @@ export const ConstructorElementWrapper = ({ ingredient, index }: ConstructorElem
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return
       }
-      dispatch({
-        type: MOVE_INGREDIENT, payload: {
-          from: dragIndex,
-          to: hoverIndex
-        }
-      })
+      dispatch(moveIngredient(dragIndex, hoverIndex))
       item.index = hoverIndex
     },
   })

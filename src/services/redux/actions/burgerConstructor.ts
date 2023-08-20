@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { TIngredient } from '../types/types';
 
 export const ADD_INGREDIENT = 'ADD_INGREDIENT';
 export const MOVE_INGREDIENT = 'MOVE_INGREDIENT';
@@ -22,7 +21,7 @@ interface IRemoveIngredientAction {
 
 interface IMoveIngredientAction {
   type: typeof MOVE_INGREDIENT;
-  payload: TIngredient;
+  payload: { from: number, to: number };
 }
 
 interface ISetBurgerBunAction {
@@ -54,9 +53,9 @@ export const removeIngredient = (ingredientIndex: number): IRemoveIngredientActi
   payload: ingredientIndex
 });
 
-export const moveIngredient = (ingredient: TIngredient): IMoveIngredientAction => ({
+export const moveIngredient = (from: number, to: number): IMoveIngredientAction => ({
   type: MOVE_INGREDIENT,
-  payload: ingredient
+  payload: { from, to }
 })
 
 export const setBurgerBun = (ingredient: string): ISetBurgerBunAction => ({

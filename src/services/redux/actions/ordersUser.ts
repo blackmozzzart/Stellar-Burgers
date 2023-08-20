@@ -34,6 +34,14 @@ type TWSDisconnecting = {
     readonly type: typeof WS_USER_ORDERS_DISCONNECTING;
 }
 
+export type UserOrdersWsActions =
+    | TWSConnectionStart
+    | TWSConnectionSuccess
+    | TWSConnectionErrorAction
+    | TWSConnectionClosed
+    | TWSGetMessageAction
+    | TWSDisconnecting
+
 export const wsConnectionStart = (url: string): TWSConnectionStart => {
     return {
         type: WS_USER_ORDERS_CONNECTION_START,
@@ -60,11 +68,3 @@ export const wsGetMessage = (data: Readonly<TWSGetMessage>): TWSGetMessageAction
 export const wsDisconnecting = (): TWSDisconnecting => {
     return { type: WS_USER_ORDERS_DISCONNECTING };
 };
-
-export type UserOrdersWsActions =
-    | TWSConnectionStart
-    | TWSConnectionSuccess
-    | TWSConnectionErrorAction
-    | TWSConnectionClosed
-    | TWSGetMessageAction
-    | TWSDisconnecting

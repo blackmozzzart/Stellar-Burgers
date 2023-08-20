@@ -72,6 +72,7 @@ export const BurgerConstructor: React.FC = () => {
                 bun={selectedBun}
             >
                 <div
+                    data-test="drop-area"
                     className={`${styles.container} ${styles.dropTarget}`}
                     ref={drop}
                 >
@@ -101,7 +102,7 @@ export const BurgerConstructor: React.FC = () => {
                     </span>
                     <CurrencyIcon type='primary' />
                 </div>
-                <Button disabled={!(selectedBun && ingredientsList.length)} htmlType="button" type="primary" size="medium" onClick={handleClick}>
+                <Button disabled={!(selectedBun && ingredientsList.length)} htmlType="button" type="primary" size="medium" onClick={handleClick} data-test="checkout">
                     {isOrderLoading ? 'Идет загрузка' : 'Оформить заказ'}
                 </Button>
             </div>

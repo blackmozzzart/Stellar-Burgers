@@ -17,7 +17,7 @@ export const Ingredient: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <h2 className={`${styles.title} text text_type_main-large`}>Детали ингридиента</h2>
+            <h2 className={`${styles.title} text text_type_main-large`}>Детали ингредиента</h2>
             <IngredientDetails
                 image={ingredient.image}
                 name={ingredient.name}

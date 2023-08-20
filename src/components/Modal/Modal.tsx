@@ -41,7 +41,7 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = (props) => {
                     {props.title && (
                         <h3 className={`${styles.title} text text_type_main-large`}>{props.title}</h3>
                     )}
-                    <div className={styles.icon}>
+                    <div className={styles.icon} data-test="modal-close">
                         <CloseIcon type='primary' onClick={handleCloseModal} />
                     </div>
                 </div>

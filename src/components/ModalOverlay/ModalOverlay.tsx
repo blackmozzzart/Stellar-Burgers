@@ -17,6 +17,7 @@ export const ModalOverlay: React.FC<ModalOverlayProps> = (props) => {
         <div
             className={styles.overlay}
             onClick={handleClick}
+            data-test="modal-overlay"
         >
             {props.children}
         </div>

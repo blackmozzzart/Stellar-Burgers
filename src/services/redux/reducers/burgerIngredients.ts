@@ -1,7 +1,7 @@
 import { TIngredient } from "../types/types";
 import { FETCH_INGREDIENTS_REQUEST, FETCH_INGREDIENTS_SUCCESS, FETCH_INGREDIENTS_FAILURE, TFetchIngredientsActionTypes } from "../actions/burgerIngredients";
 
-interface IIngredientsInitialState {
+export interface IIngredientsInitialState {
     ingredients: TIngredient[];
     loading: boolean;
     error: null | string;

@@ -1,6 +1,6 @@
 import { FETCH_ORDER_FAILURE, FETCH_ORDER_REQUEST, FETCH_ORDER_SUCCESS, TOrderActionTypes, UPDATE_ORDER_NUMBER } from "../actions/orderDetails";
 
-type IOrderDetailsInitialState = {
+export type IOrderDetailsInitialState = {
     order: number | null;
     loading: boolean;
     error: string | null;

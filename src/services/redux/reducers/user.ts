@@ -1,7 +1,7 @@
 import { getAccessToken, getRefreshToken, parseToken } from "../../../utils/tokenHelpet";
 import { FORGOT_PASSWORD_FAILURE, FORGOT_PASSWORD_SUCCESS, GET_USER_FAILURE, GET_USER_SUCCESS, LOGIN_FAILURE, LOGIN_SUCCESS, LOGOUT_FAILURE, LOGOUT_SUCCESS, REFRESH_TOKEN_FAILURE, REFRESH_TOKEN_SUCCESS, REGISTRATION_FAILURE, REGISTRATION_SUCCESS, REMOVE_USER, RESET_PASSWORD_FAILURE, RESET_PASSWORD_SUCCESS, SET_USER, TUserActionTypes, UPDATE_USER, UPDATE_USER_FAILURE, UPDATE_USER_SUCCESS } from "../actions/user";
 
-interface IUserInitialState {
+export interface IUserInitialState {
     isLoggedIn: boolean,
     email: string,
     name: string,
@@ -65,12 +65,11 @@ const initialState: IUserInitialState = {
     refreshToken: null,
 }
 
-function getInitialState(): IUserInitialState {
+export function getInitialState(): IUserInitialState {
     const initialUser = localStorage.getItem('user');
     const token = getAccessToken();
     const refreshToken = getRefreshToken();
 
-    console.log('inital')
     if (initialUser && token && refreshToken) {
         const user = JSON.parse(initialUser);
         const parsedToken = parseToken(token);
@@ -226,7 +225,6 @@ export const userReducer = (state = initialState, action: TUserActionTypes): IUs
             }
         }
         default: {
-            console.log(getInitialState())
             return getInitialState();
         }
     }

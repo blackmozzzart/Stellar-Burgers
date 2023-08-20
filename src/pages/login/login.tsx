@@ -1,12 +1,13 @@
 import React, { useState, FormEvent } from 'react';
 import styles from './login.module.css';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { loginThunk } from '../../services/redux/actions/user';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { ROUTE_FORGOT_PASSWORD, ROUTE_REGISTER } from '../../utils/constants';
 
 export const Login: React.FC = () => {
+    const navigate = useNavigate();
     const [emailValue, setEmailValue] = useState('');
     const [passValue, setPassValue] = useState('');
     const dispatch = useAppDispatch();
@@ -19,11 +20,11 @@ export const Login: React.FC = () => {
             return;
         }
 
-        dispatch(loginThunk({
+        await dispatch(loginThunk({
             email: emailValue,
             password: passValue
         }))
-
+        navigate('/');
     }
 
     return (
@@ -47,7 +48,7 @@ export const Login: React.FC = () => {
                         name={'password'}
                     />
                 </div>
-                <Button type='primary' size='medium' htmlType='submit'>
+                <Button type='primary' size='medium' htmlType='submit' data-test="button-login">
                     Войти
                 </Button>
             </form>

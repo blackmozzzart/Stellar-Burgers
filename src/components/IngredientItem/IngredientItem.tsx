@@ -43,6 +43,7 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({ id, image, type,
             style={{ opacity: isDragging ? 0.5 : 1 }}
             className={styles.container}
             onClick={onClick}
+            data-test="ingredient"
         >
             <img src={image} className={`${styles.image} ml-4 mr-4`} alt='ingredient' />
             {counter && <Counter count={counter} size='default' extraClass={`${styles.counter} text text_type_digits-default`} />}
