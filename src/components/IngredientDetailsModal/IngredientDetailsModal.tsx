@@ -21,7 +21,7 @@ export const IngredientDetailsModal: React.FC = () => {
             onClose={() => {
                 navigate('/')
             }}
-            title='Детали ингридиента'
+            title='Детали ингредиента'
         >
             {ingredient && (
                 <IngredientDetails

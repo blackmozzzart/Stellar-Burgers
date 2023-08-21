@@ -2,6 +2,7 @@ import React from 'react';
 import { MenuItem } from '../MenuItem';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './appHeader.module.css';
+import { Link } from 'react-router-dom';
 
 export const AppHeader: React.FC = () => {
 
@@ -20,9 +21,9 @@ export const AppHeader: React.FC = () => {
                         text={'Лента заказов'}
                     />
                 </nav>
-                <a href={'/'}>
+                <Link to={{ pathname: '/' }}>
                     <Logo />
-                </a>
+                </Link>
                 <nav className={`${styles.nav} ${styles.nav_right}`}>
                     <MenuItem
                         href={'/profile'}

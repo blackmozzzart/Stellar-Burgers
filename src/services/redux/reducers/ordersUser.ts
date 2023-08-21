@@ -8,7 +8,7 @@ import {
     UserOrdersWsActions,
 } from '../actions/ordersUser';
 
-interface IOrdersUserInitialState {
+export interface IOrdersUserInitialState {
     wsConnected: boolean;
     orders: TOrders[];
     total: number;

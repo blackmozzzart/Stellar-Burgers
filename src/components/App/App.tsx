@@ -2,12 +2,11 @@ import { useEffect } from 'react';
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
-
+import { BurgerIngredients } from '../BurgerIngredients';
 import styles from './app.module.css';
 import { AppHeader } from '../AppHeader';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { BurgerConstructor } from '../BurgerConstructor';
-import { BurgerIngredients } from '../BurgerIngredients/BurgerIngredients';
 import { fetchIngredientsThunk } from '../../services/redux/actions/burgerIngredients';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { Login } from '../../pages/login/login';

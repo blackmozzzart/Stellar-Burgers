@@ -1,4 +1,3 @@
-import { redirect } from 'react-router-dom';
 import { getUserRequest, loginRequest, logoutRequest, refreshToken, registerRequest, updateUserRequest } from "../../../utils/api";
 import { AppThunkAction } from '../../store';
 import { TUser } from '../types/types';
@@ -38,8 +37,6 @@ export function saveUser(user: TUser) {
         localStorage.setItem('user', JSON.stringify(user))
     }
 }
-
-
 
 export type TUserActionTypes =
     | ReturnType<typeof setUser>
@@ -141,7 +138,6 @@ export const registerThunk = ({ email, name, password }: TUser): AppThunkAction<
             dispatch(setUser(data.user.email, data.user.name, data.user.password, data.accessToken))
             saveUser(data.user)
             saveToken(data)
-            redirect('/')
         })
         .catch(() => {
             dispatch({
@@ -164,7 +160,6 @@ export const loginThunk = ({ email, password }: Pick<TUser, 'email' | 'password'
             dispatch(setUser(data.user.email, data.user.name, password, data.accessToken))
             saveUser({ ...data.user, password })
             saveToken(data)
-            redirect('/')
         })
         .catch(() => {
             dispatch({

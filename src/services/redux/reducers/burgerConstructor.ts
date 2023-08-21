@@ -2,7 +2,7 @@ import { ADD_INGREDIENT, CLEAR_BURGER_CONSTRUCTOR, MOVE_INGREDIENT, REMOVE_INGRE
 
 export interface IBurgerConstuctorIngredient { id: string; uniqId: string; }
 
-interface IBurgerConstructorInitialState {
+export interface IBurgerConstructorInitialState {
     ingredients: IBurgerConstuctorIngredient[];
     bun: null | string;
 }

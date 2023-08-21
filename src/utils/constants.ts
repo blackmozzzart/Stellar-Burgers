@@ -33,4 +33,4 @@ export const ROUTE_PROFILE = '/profile';
 export const ROUTE_ORDERS = `${ROUTE_PROFILE}/orders`;
 export const ROUTE_FEED = '/feed';
 export const ROUTE_INGREDIENTS_ID = '/ingredients/:id';
-export const ROUTE_NOT_FOUND = '*';
+export const ROUTE_NOT_FOUND = '/*';
